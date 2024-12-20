@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+			"prettier.eslintIntegration": true,
+			"prettier.stylelintIntegration": true,
+			"[scss]": {
+				"editor.formatOnSave": true
+			},
+			"[json]": {
+				"editor.formatOnSave": true
+			},
+			"editor.codeActionsOnSave": {
+				"source.fixAll.eslint": "explicit"
+		}
+ 	}
+}

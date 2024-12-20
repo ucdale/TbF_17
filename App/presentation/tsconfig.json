@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+      "outDir": "../../wwwroot/app/dist/",
+      "allowSyntheticDefaultImports": true,
+      "noImplicitAny": true,
+      "module": "esnext",
+      "target": "es6",
+      "lib": ["es6", "dom", "dom.iterable"],
+      "jsx": "react",
+      "allowJs": true,
+      "strict": true,
+      "moduleResolution": "node",
+      "types": ["node", "jest", "@testing-library/jest-dom"]
+    },
+    "compileOnSave": true,
+    "include": [
+      "./src/**/*",
+      "./test/setupTests.ts"
+    ],
+    "exclude": [ "node_modules", "src/client/@custom_types" ]
+}
