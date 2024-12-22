@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
-import './App.css';
+// import './App.css';
 import Logo from './Logo';
 import Button from '@mui/material/Button';
 import AppHeader from './AppHeader';
+import AppRouter from './AppRouter';
 
 const App = () => {
 
@@ -13,13 +14,7 @@ const App = () => {
   return (
     <div className="App">
       <AppHeader />
-      <header className="App-header">
-        <Logo className="App-logo" />
-        <p>
-          Home page
-        </p>
-        <Button variant="contained" onClick={goToReactGuide}  className="App-link" >Learn React</Button>
-      </header>
+      <AppRouter />
     </div>
   );
 }
