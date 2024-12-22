@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
     "start:frontend": "cd ./App/Presentation && npm run start",
-    "start:backend": "cd ./App && nodemon index.js",
+    "start:backend": "cd ./App && nodemon index.ts",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
   },
   "proxy": "http://localhost:3001",
@@ -16,10 +17,14 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "mysql2": "^3.11.5",
-    "nano": "^10.1.4",
-    "nodemon": "^3.1.9"
+    "nano": "^10.1.4"
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "concurrently": "^9.1.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   }
 }
