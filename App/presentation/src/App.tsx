@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import './App.css';
 import Logo from './Logo';
 import Button from '@mui/material/Button';
+import AppHeader from './AppHeader';
 
 const App = () => {
 
@@ -11,10 +12,11 @@ const App = () => {
 
   return (
     <div className="App">
+      <AppHeader />
       <header className="App-header">
         <Logo className="App-logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Home page
         </p>
         <Button variant="contained" onClick={goToReactGuide}  className="App-link" >Learn React</Button>
       </header>
