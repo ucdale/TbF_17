@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd ./App/Presentation && npm run start && cd ./App && nodemon index.js"
+    "start:frontend": "cd ./App/Presentation && npm run start",
+    "start:backend": "cd ./App && nodemon index.js",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
   },
+  "proxy": "http://localhost:3001",
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -15,5 +18,8 @@
     "mysql2": "^3.11.5",
     "nano": "^10.1.4",
     "nodemon": "^3.1.9"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   }
 }
