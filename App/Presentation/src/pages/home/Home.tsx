@@ -32,7 +32,8 @@ const Home: React.FC = () => {
         console.error('Error fetching matches:', 'qualcosa è andato storto');
         return null;
       }
-      return response.data.matches;
+      // return response.data.matches;
+      return response.data;
     } catch (error) {
       console.error('Error fetching matches:', error);
       return null;

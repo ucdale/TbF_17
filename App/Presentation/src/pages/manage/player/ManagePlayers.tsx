@@ -26,7 +26,8 @@ const ManagePlayers: React.FC = () => {
         console.error('Error fetching players:', 'qualcosa è andato storto');
         return null;
       }
-      return response.data.players;
+      // return response.data.players;
+      return response.data;
     } catch (error) {
       console.error('Error fetching players:', error);
       return null;

@@ -35,7 +35,8 @@ class TeamController {
   static async getAllTeams(req: Request, res: Response): Promise<void> {
     try {
       const response = await db.find({ selector: { type: 'team' } });
-      res.json(response.docs);
+      const teams = response.docs.map((doc: any) => doc.team);
+      res.json(teams);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching teams' });
     }

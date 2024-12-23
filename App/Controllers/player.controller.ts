@@ -8,7 +8,8 @@ class PlayerController {
   static async getAllPlayers(req: Request, res: Response): Promise<void> {
     try {
       const response = await db.find({ selector: { type: 'player' } });
-      res.json(response.docs);
+      const players = response.docs.map((doc: any) => doc.player);
+      res.json(players);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching players' });
     }

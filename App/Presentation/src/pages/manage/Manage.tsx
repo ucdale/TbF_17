@@ -28,7 +28,8 @@ const Manage: React.FC = () => {
         console.error('Error fetching teams:', 'qualcosa è andato storto');
         return null;
       }
-      return response.data.teams;
+      // return response.data.teams;
+      return response.data;
     } catch (error) {
       console.error('Error fetching teams:', error);
       return null;
