@@ -1,17 +1,17 @@
 {
   const express = require('express');
   const router = express.Router();
-  const matchController = require('../controllers/match.controller');
+  const playerController = require('../controllers/player.controller');
   const authMiddleware = require('../middlewares/auth.middleware');
 
-  // Handle the /match endpoint
+  // Handle the /player endpoint
   router.get(
-    '/getAllMatches',
+    '/getAllPlayers',
     authMiddleware.authenticate,
-    matchController.getAllMatches
+    playerController.getAllPlayers
   );
 
-  // Add more routes for the /match endpoint as needed
+  // Add more routes for the /player endpoint as needed
 
   module.exports = router;
 }

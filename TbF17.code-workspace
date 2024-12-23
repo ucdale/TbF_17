@@ -5,16 +5,16 @@
 		}
 	],
 	"settings": {
-			"prettier.eslintIntegration": true,
-			"prettier.stylelintIntegration": true,
-			"[scss]": {
-				"editor.formatOnSave": true
-			},
-			"[json]": {
-				"editor.formatOnSave": true
-			},
-			"editor.codeActionsOnSave": {
-				"source.fixAll.eslint": "explicit"
-		}
- 	}
+		"[scss]": {
+			"editor.formatOnSave": true
+		},
+		"[json]": {
+			"editor.formatOnSave": true
+		},
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit",
+			"source.fixAll.stylelint": "explicit"
+		},
+		"stylelint.validate": ["css", "scss"]
+	}
 }

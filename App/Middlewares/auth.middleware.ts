@@ -1,17 +1,17 @@
 function authenticate(req, res, next) {
-    // Implement your authentication logic here
+  // Implement your authentication logic here
 
-    const authenticated = true;
-    
-    // If authentication fails
-    if (!authenticated) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+  const authenticated = true;
 
-    // If authentication succeeds, call next() to proceed to the next middleware or route handler
-    next();
+  // If authentication fails
+  if (!authenticated) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  module.exports = {
-    authenticate,
-  };
+  // If authentication succeeds, call next() to proceed to the next middleware or route handler
+  next();
+}
+
+module.exports = {
+  authenticate
+};

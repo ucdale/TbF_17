@@ -4,17 +4,16 @@ import { ROUTES } from './models/routes';
 import ConfigApplicazioneContext from './context/ConfigApplicazioneContext';
 import Home from './pages/home/Home';
 import Leaderboards from './pages/leaderboards/Leaderboards';
-import ManageTeams from './pages/manage/ManageTeams';
+import Manage from './pages/manage/Manage';
 
-type AppRouterProps = {
-};
+type AppRouterProps = {};
 
 const AppRouter: React.FC<AppRouterProps> = ({}) => {
   const { configApplicazione } = useContext(ConfigApplicazioneContext);
 
   const HomeComponent = <Home />;
   const LeaderboardsComponent = <Leaderboards />;
-  const ManageComponent = <ManageTeams />;
+  const ManageComponent = <Manage />;
 
   return (
     <Routes>

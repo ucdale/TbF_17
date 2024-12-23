@@ -1,0 +1,30 @@
+.onGoingMatches-div {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.header-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+}
+
+.button-container {
+  position: absolute;
+  right: 0;
+  margin-right: 40px;
+}
+
+.finishedMatches-div {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
