@@ -1,17 +1,10 @@
-{
-  const express = require('express');
-  const router = express.Router();
-  const playerController = require('../controllers/player.controller');
-  const authMiddleware = require('../middlewares/auth.middleware');
+import express from 'express';
+import PlayerController from '../Controllers/player.controller';
+import { authenticate } from '../Middlewares/auth.middleware';
 
-  // Handle the /player endpoint
-  router.get(
-    '/getAllPlayers',
-    authMiddleware.authenticate,
-    playerController.getAllPlayers
-  );
+const router = express.Router();
 
-  // Add more routes for the /player endpoint as needed
+router.get('/getAllPlayers', authenticate, PlayerController.getAllPlayers);
+router.post('/createPlayer', authenticate, PlayerController.createPlayer);
 
-  module.exports = router;
-}
+export default router;

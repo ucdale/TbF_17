@@ -1,17 +1,10 @@
-{
-  const express = require('express');
-  const router = express.Router();
-  const matchController = require('../controllers/match.controller');
-  const authMiddleware = require('../middlewares/auth.middleware');
+import express from 'express';
+import MatchController from '../Controllers/match.controller';
+import { authenticate } from '../Middlewares/auth.middleware';
 
-  // Handle the /match endpoint
-  router.get(
-    '/getAllMatches',
-    authMiddleware.authenticate,
-    matchController.getAllMatches
-  );
+const router = express.Router();
 
-  // Add more routes for the /match endpoint as needed
+router.get('/getAllMatches', authenticate, MatchController.getAllMatches);
+router.post('/createMatch', authenticate, MatchController.createMatch);
 
-  module.exports = router;
-}
+export default router;

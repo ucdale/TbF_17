@@ -1,17 +1,10 @@
-{
-  const express = require('express');
-  const router = express.Router();
-  const teamController = require('../controllers/team.controller');
-  const authMiddleware = require('../middlewares/auth.middleware');
+import express from 'express';
+import TeamController from '../Controllers/team.controller';
+import { authenticate } from '../Middlewares/auth.middleware';
 
-  // Handle the /team endpoint
-  router.get(
-    '/getAllTeams',
-    authMiddleware.authenticate,
-    teamController.getAllTeams
-  );
+const router = express.Router();
 
-  // Add more routes for the /team endpoint as needed
+router.get('/getAllTeams', authenticate, TeamController.getAllTeams);
+router.post('/createTeam', authenticate, TeamController.createTeam);
 
-  module.exports = router;
-}
+export default router;

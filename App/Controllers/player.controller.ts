@@ -1,32 +1,29 @@
-class PlayerController {
-  static getAllPlayers(req, res) {
-    // Fetch players data from your database or any other source
-    const players = [
-      // esempio di dati
-      {
-        name: 'Pippo',
-        goals: 2,
-        blocks: 0
-      },
-      {
-        name: 'Pluto',
-        goals: 1,
-        blocks: 4
-      },
-      {
-        name: 'Paperino',
-        goals: 0,
-        blocks: 0
-      },
-      {
-        name: 'Gastonew',
-        goals: 1,
-        blocks: 10
-      }
-    ];
+import { Request, Response } from 'express';
+import nano from 'nano';
 
-    res.json({ players });
+const couch = nano('http://admin:admin@127.0.0.1:5984');
+const db = couch.db.use('tbf17');
+
+class PlayerController {
+  static async getAllPlayers(req: Request, res: Response): Promise<void> {
+    try {
+      const response = await db.find({ selector: { type: 'player' } });
+      res.json(response.docs);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching players' });
+    }
+  }
+
+  static async createPlayer(req: Request, res: Response): Promise<void> {
+    try {
+      const player = req.body;
+      player.type = 'player';
+      const response = await db.insert(player);
+      res.json(response);
+    } catch (error) {
+      res.status(500).json({ error: 'Error creating player' });
+    }
   }
 }
 
-module.exports = PlayerController;
+export default PlayerController;
