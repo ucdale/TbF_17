@@ -1,34 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import {
   Button,
-  ButtonGroup,
-  ClickAwayListener,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Grow,
   IconButton,
   MenuItem,
-  MenuList,
-  Paper,
-  Slide,
-  Table,
-  TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
   TableRow
 } from '@mui/material';
-import axios from 'axios';
 import { MoreVert } from '@mui/icons-material';
 import { PlayerType } from '../../../types/PlayerType';
 import StyledMenu from '../../../components/StyledMenu';
 import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
 import ArchiveIcon from '@mui/icons-material/Archive';
-import { TransitionProps } from '@mui/material/transitions';
 import Transition from '../../../components/Trasition';
 // import {
 //   DialogsProvider,
