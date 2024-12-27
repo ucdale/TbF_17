@@ -16,6 +16,6 @@
     "include": [
       "./src/**/*",
       "./test/setupTests.ts"
-    ],
+, "global.d.ts"    ],
     "exclude": [ "node_modules", "src/client/@custom_types" ]
 }
