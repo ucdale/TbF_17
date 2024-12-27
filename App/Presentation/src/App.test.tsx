@@ -1,11 +1,17 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import App from './App';
+import { MemoryRouter } from 'react-router';
 
 describe('App', () => {
-  test('renders learn react button', () => {
-    render(<App />);
-    const linkElement = screen.getByText(/learn react/i);
-    expect(linkElement).toBeInTheDocument();
+  test('renders App component with className App', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>
+    );
+
+    const elementWithClass = container.querySelector('.App');
+    expect(elementWithClass).toBeInTheDocument();
   });
 });

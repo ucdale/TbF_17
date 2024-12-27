@@ -24,9 +24,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "lint": "eslint ./src"
   },
   "eslintConfig": {
     "extends": [
@@ -61,6 +62,10 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.9",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
@@ -68,6 +73,7 @@
     "@typescript-eslint/eslint-plugin": "6.18.1",
     "@typescript-eslint/parser": "6.18.1",
     "alex": "^8.2.0",
+    "babel-jest": "^29.7.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "17.1.0",
@@ -97,6 +103,7 @@
     "svg-term-cli": "^2.1.1",
     "tempy": "^1.0.1",
     "typescript": "^4.2.4",
+    "util": "^0.12.5",
     "wait-for-localhost": "^3.3.0",
     "web-vitals": "^2.1.4"
   }
