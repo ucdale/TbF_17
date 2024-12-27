@@ -8,6 +8,7 @@
     "build": "npx tsc",
     "start:frontend": "cd ./App/Presentation && npm run start",
     "start:backend": "cd ./App && nodemon index.ts",
+    "install:frontend": "cd ./App/Presentation && npm i",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
   },
   "proxy": "http://localhost:3001",
