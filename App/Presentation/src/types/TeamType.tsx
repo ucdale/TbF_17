@@ -1,11 +1,10 @@
-import { PlayerType } from './PlayerType';
-
-export type PlayerInTeamType = PlayerType & {
+export type PlayerInTeamType = {
   position: 'striker' | 'defender';
+  name: string;
 };
 
 export type TeamType = {
-  _id?: string;
+  _id: string;
   name: string;
   players: [PlayerInTeamType, PlayerInTeamType];
 };

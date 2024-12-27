@@ -19,6 +19,34 @@ class PlayerController {
     }
   }
 
+  static async getAllEligiblePlayersByName(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { term, excludeName } = req.query;
+
+      // Costruisci il selettore per filtrare i giocatori in base al termine di ricerca e al nome da escludere
+      const selector: any = {
+        type: 'player',
+        'player.name': { $regex: term ? `(?i)${term}` : '' }
+      };
+
+      if (excludeName) {
+        selector['player.name'].$ne = excludeName;
+      }
+
+      const response = await db.find({ selector });
+      const players = response.docs.map((doc: any) => ({
+        _id: doc._id,
+        ...doc.player
+      }));
+      res.json(players);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching players' });
+    }
+  }
+
   static async createPlayer(req: Request, res: Response): Promise<void> {
     try {
       const { name } = req.body;

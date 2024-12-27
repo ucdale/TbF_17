@@ -6,5 +6,7 @@ const router = express.Router();
 
 router.get('/getAllTeams', authenticate, TeamController.getAllTeams);
 router.post('/createTeam', authenticate, TeamController.createTeam);
+router.post('/updateTeam', authenticate, TeamController.updateTeam);
+router.post('/deleteTeam', authenticate, TeamController.deleteTeam);
 
 export default router;

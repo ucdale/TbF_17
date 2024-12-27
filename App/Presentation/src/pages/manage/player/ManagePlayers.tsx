@@ -15,7 +15,7 @@ import { PlayerType } from '../../../types/PlayerType';
 import axios from 'axios';
 import PlayerTableRow from './PlayerTableRow';
 import AddIcon from '@mui/icons-material/Add';
-import ModalPlayer from './ModalPlayer';
+import ModalCreateEditPlayer from './ModalCreateEditPlayer';
 
 const ManagePlayers: React.FC = () => {
   const [players, setPlayers] = useState<PlayerType[] | null>(null);
@@ -138,7 +138,7 @@ const ManagePlayers: React.FC = () => {
           <CircularProgress sx={{ marginTop: '40' }} size={40} />
         )}
       </div>
-      <ModalPlayer
+      <ModalCreateEditPlayer
         show={showModaleCreaPlayer}
         onClose={handleCloseModaleCreaPlayer}
         setPlayers={setPlayers}
