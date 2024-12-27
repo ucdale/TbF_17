@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Popover, Typography } from '@mui/material';
 import { MatchType } from '../../types/MatchType';
 import ItemBox from '../ItemBox';
+import { PlayerInTeamType } from '../../types/TeamType';
 
 type MatchBoxProps = {
   match: MatchType;
@@ -71,7 +72,7 @@ const MatchBox: React.FC<MatchBoxProps> = ({ match }) => {
             Striker:{' '}
             {
               match.teamRed.players.find(
-                (player: any) => player.type === 'striker'
+                (player: PlayerInTeamType) => player.position === 'striker'
               )?.name
             }
           </Typography>
@@ -79,7 +80,7 @@ const MatchBox: React.FC<MatchBoxProps> = ({ match }) => {
             Defender:{' '}
             {
               match.teamRed.players.find(
-                (player: any) => player.type === 'defender'
+                (player: PlayerInTeamType) => player.position === 'defender'
               )?.name
             }
           </Typography>
@@ -128,7 +129,7 @@ const MatchBox: React.FC<MatchBoxProps> = ({ match }) => {
             Striker:{' '}
             {
               match.teamBlue.players.find(
-                (player: any) => player.type === 'striker'
+                (player: PlayerInTeamType) => player.position === 'striker'
               )?.name
             }
           </Typography>
@@ -136,7 +137,7 @@ const MatchBox: React.FC<MatchBoxProps> = ({ match }) => {
             Defender:{' '}
             {
               match.teamBlue.players.find(
-                (player: any) => player.type === 'defender'
+                (player: PlayerInTeamType) => player.position === 'defender'
               )?.name
             }
           </Typography>

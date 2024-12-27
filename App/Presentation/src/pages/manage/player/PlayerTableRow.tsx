@@ -3,11 +3,17 @@ import {
   Button,
   ButtonGroup,
   ClickAwayListener,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grow,
   IconButton,
   MenuItem,
   MenuList,
   Paper,
+  Slide,
   Table,
   TableBody,
   TableCell,
@@ -22,19 +28,47 @@ import StyledMenu from '../../../components/StyledMenu';
 import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import { TransitionProps } from '@mui/material/transitions';
+import Transition from '../../../components/Trasition';
+// import {
+//   DialogsProvider,
+//   useDialogs,
+//   DialogProps
+// } from '@toolpad/core/useDialogs';
 
 type PlayerTableRowProps = {
   player: PlayerType;
+  setShowModaleCreaPlayer: React.Dispatch<React.SetStateAction<boolean>>;
+  setPlayerToEdit: React.Dispatch<React.SetStateAction<PlayerType | null>>;
+  deletePlayer: (id: string) => void;
 };
 
-const PlayerTableRow: React.FC<PlayerTableRowProps> = ({ player }) => {
+const PlayerTableRow: React.FC<PlayerTableRowProps> = ({
+  player,
+  setShowModaleCreaPlayer,
+  setPlayerToEdit,
+  deletePlayer
+}) => {
+  //const dialogs = useDialogs(); // sarebbe stato carino usare toolpad/core/useDialogs ma voleva che usassi react 18
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClickOpenConfirmDialog = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
   };
 
   return (
@@ -70,18 +104,51 @@ const PlayerTableRow: React.FC<PlayerTableRowProps> = ({ player }) => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose} disableRipple>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setPlayerToEdit(player);
+                  setShowModaleCreaPlayer(true);
+                }}
+                disableRipple
+              >
                 <EditIcon />
                 Edit name
               </MenuItem>
               <Divider sx={{ my: 0.5 }} />
-              <MenuItem onClick={handleClose} disableRipple>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  handleClickOpenConfirmDialog();
+                }}
+                disableRipple
+              >
                 <ArchiveIcon />
                 Archive
               </MenuItem>
             </StyledMenu>
           </div>
         </TableCell>
+        <Dialog
+          open={openConfirmDialog}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleCloseConfirmDialog}
+          aria-describedby='alert-dialog-slide-description'
+        >
+          <DialogTitle>{`Delete ${player.name} ?`}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-slide-description'>
+              This action cannot be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => deletePlayer(player._id)}>Delete</Button>
+            <Button variant='contained' onClick={handleCloseConfirmDialog}>
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
       </TableRow>
     </>
   );

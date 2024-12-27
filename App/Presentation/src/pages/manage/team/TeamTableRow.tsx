@@ -17,8 +17,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { MoreVert } from '@mui/icons-material';
-import { PlayerType } from '../../../types/PlayerType';
-import { TeamType } from '../../../types/TeamType';
+import { PlayerInTeamType, TeamType } from '../../../types/TeamType';
 import StyledMenu from '../../../components/StyledMenu';
 import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
@@ -51,14 +50,15 @@ const TeamTableRow: React.FC<TeamTableRowProps> = ({ team }) => {
         </TableCell>
         <TableCell>
           {
-            team.players.find((player: PlayerType) => player.type === 'striker')
-              ?.name
+            team.players.find(
+              (player: PlayerInTeamType) => player.position === 'striker'
+            )?.name
           }
         </TableCell>
         <TableCell>
           {
             team.players.find(
-              (player: PlayerType) => player.type === 'defender'
+              (player: PlayerInTeamType) => player.position === 'defender'
             )?.name
           }
         </TableCell>
