@@ -6,5 +6,11 @@ const router = express.Router();
 
 router.get('/getAllPlayers', authenticate, PlayerController.getAllPlayers);
 router.post('/createPlayer', authenticate, PlayerController.createPlayer);
+router.post(
+  '/updatePlayerName',
+  authenticate,
+  PlayerController.updatePlayerName
+);
+router.post('/deletePlayer', authenticate, PlayerController.deletePlayer);
 
 export default router;

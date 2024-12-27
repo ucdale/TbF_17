@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Button,
   CircularProgress,
   Grid2 as Grid,
   Paper,
@@ -13,6 +14,7 @@ import {
 import { TeamType } from '../../../types/TeamType';
 import axios from 'axios';
 import TeamTableRow from './TeamTableRow';
+import AddIcon from '@mui/icons-material/Add';
 
 const ManageTeams: React.FC = () => {
   const [teams, setTeams] = useState<TeamType[] | null>(null);
@@ -47,7 +49,7 @@ const ManageTeams: React.FC = () => {
     }
   }, [teams, ottieniTeams]);
   return (
-    <div>
+    <div className='manageTable-div'>
       <Grid container spacing={1}>
         <Grid size={12}>
           <div className='header-container'>
@@ -56,8 +58,14 @@ const ManageTeams: React.FC = () => {
             </h1>
           </div>
         </Grid>
+        <Grid size={9}></Grid>
+        <Grid size={3} style={{ textAlign: 'right' }}>
+          <Button startIcon={<AddIcon />} size='medium'>
+            Add new team
+          </Button>
+        </Grid>
       </Grid>
-      <div className='manageTable-div'>
+      <div style={{ marginTop: '40px' }}>
         {teams ? (
           <TableContainer component={Paper}>
             <Table

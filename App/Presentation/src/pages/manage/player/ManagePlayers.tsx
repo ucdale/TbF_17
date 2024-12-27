@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Alert,
+  Box,
+  Button,
   CircularProgress,
+  FormControl,
   Grid2 as Grid,
   Paper,
   Table,
@@ -8,14 +12,21 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  TextField
 } from '@mui/material';
 import { PlayerType } from '../../../types/PlayerType';
 import axios from 'axios';
 import PlayerTableRow from './PlayerTableRow';
+import AddIcon from '@mui/icons-material/Add';
+import ModalStyled from '../../../components/ModalStyled';
 
 const ManagePlayers: React.FC = () => {
   const [players, setPlayers] = useState<PlayerType[] | null>(null);
+  const [error, setError] = useState({ show: false, Message: '' });
+  const [showModaleCreaPlayer, setShowModaleCreaPlayer] =
+    useState<boolean>(false);
+  const [name, setName] = useState<string>('');
 
   const getPlayers = async () => {
     try {
@@ -47,18 +58,107 @@ const ManagePlayers: React.FC = () => {
     }
   }, [players, ottieniPlayers]);
 
+  const handleCloseModaleCreaPlayer = useCallback((refresh = false) => {
+    setShowModaleCreaPlayer(false);
+    setName('');
+    setError({ show: false, Message: '' });
+    if (refresh) {
+      setPlayers(null);
+    }
+  }, []);
+
+  const aggiungiPlayer = useCallback(async () => {
+    try {
+      const newPlayer = {
+        name
+      };
+      const response = await axios.post(
+        'http://localhost:3001/player/createPlayer',
+        newPlayer
+      );
+      if (response.status === 200) {
+        debugger;
+        setPlayers((prevPlayers) =>
+          prevPlayers ? [...prevPlayers, response.data] : [response.data]
+        );
+        handleCloseModaleCreaPlayer(false);
+      } else {
+        setError({ show: true, Message: response.data.error });
+        console.error('Error adding player:', 'qualcosa è andato storto');
+      }
+    } catch (error) {
+      setError({ show: true, Message: 'Something went wrong' });
+      console.error('Error adding player:', error);
+    }
+  }, [handleCloseModaleCreaPlayer, name]);
+
+  const updatePlayerName = useCallback(
+    async (id: string, newName: string) => {
+      try {
+        const response = await axios.post(
+          'http://localhost:3001/player/updatePlayerName',
+          {
+            id,
+            name: newName
+          }
+        );
+        if (response.status === 200) {
+          console.log('Player name updated successfully:', response.data);
+          // Update the local state or re-fetch the players
+          ottieniPlayers();
+        } else {
+          console.error(
+            'Error updating player name:',
+            'qualcosa è andato storto'
+          );
+        }
+      } catch (error) {
+        console.error('Error updating player name:', error);
+      }
+    },
+    [ottieniPlayers]
+  );
+
+  const deletePlayer = async (id: string) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:3001/player/deletePlayer',
+        { id }
+      );
+      if (response.status === 200) {
+        console.log('Player deleted successfully:', response.data);
+        // Update the local state or re-fetch the players
+        ottieniPlayers();
+      } else {
+        console.error('Error deleting player:', 'qualcosa è andato storto');
+      }
+    } catch (error) {
+      console.error('Error deleting player:', error);
+    }
+  };
+
   return (
-    <div>
+    <div className='manageTable-div'>
       <Grid container spacing={1}>
         <Grid size={12}>
           <div className='header-container'>
             <h1 className='header-title' style={{ marginBottom: '40px' }}>
-              Manage Players
+              Manage Teams
             </h1>
           </div>
         </Grid>
+        <Grid size={9}></Grid>
+        <Grid size={3} style={{ textAlign: 'right' }}>
+          <Button
+            onClick={() => setShowModaleCreaPlayer(true)}
+            startIcon={<AddIcon />}
+            size='medium'
+          >
+            Add new player
+          </Button>
+        </Grid>
       </Grid>
-      <div className='manageTable-div'>
+      <div style={{ marginTop: '40px' }}>
         {players ? (
           <TableContainer component={Paper}>
             <Table
@@ -89,6 +189,57 @@ const ManagePlayers: React.FC = () => {
           <CircularProgress sx={{ marginTop: '40' }} size={40} />
         )}
       </div>
+      <ModalStyled
+        title='Add new player'
+        show={showModaleCreaPlayer}
+        onClose={handleCloseModaleCreaPlayer}
+      >
+        <div>
+          <Box
+            component='form'
+            sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+            noValidate
+            autoComplete='off'
+          >
+            {error.show && (
+              <Alert sx={{ mb: 3 }} severity='error'>
+                {error.Message}
+              </Alert>
+            )}
+            <FormControl defaultValue='' required>
+              <TextField
+                id='name'
+                label='Name'
+                required
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setName(event.target.value);
+                }}
+                error={name === ''}
+                helperText={name === '' && 'Required'}
+              />
+            </FormControl>
+          </Box>
+          <Box
+            sx={{
+              mt: 1,
+              display: 'flex',
+              gap: 1,
+              flexDirection: { xs: 'column', sm: 'row-reverse' }
+            }}
+          >
+            <Button
+              variant='contained'
+              onClick={() => aggiungiPlayer()}
+              disabled={!name}
+            >
+              Add
+            </Button>
+            {/* <Button color='secondary' onClick={handleCloseModaleCreaPlayer}>
+              Cancel
+            </Button> */}
+          </Box>
+        </div>
+      </ModalStyled>
     </div>
   );
 };

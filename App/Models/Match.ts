@@ -1,4 +1,6 @@
 export interface Player {
+  // _id?: string;
+  // type: 'player',
   name: string;
   goals: number;
   blocks: number;

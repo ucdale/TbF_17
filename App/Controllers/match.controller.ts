@@ -63,7 +63,10 @@ class MatchController {
   static async getAllMatches(req: Request, res: Response): Promise<void> {
     try {
       const response = await db.find({ selector: { type: 'match' } });
-      const matches = response.docs.map((doc: any) => doc.match);
+      const matches = response.docs.map((doc: any) => ({
+        _id: doc._id,
+        ...doc.match
+      }));
       res.json(matches);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching matches' });
