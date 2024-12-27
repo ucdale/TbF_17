@@ -26,10 +26,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cd App/presentation
+    - run: cd App/Presentation
     - run: npm ci
-      working-directory: ./App/presentation
+      working-directory: ./App/Presentation
     - run: npm run build --if-present
-      working-directory: ./App/presentation
+      working-directory: ./App/Presentation
     - run: npm test
-      working-directory: ./App/presentation
+      working-directory: ./App/Presentation
