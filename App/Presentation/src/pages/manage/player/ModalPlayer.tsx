@@ -4,14 +4,14 @@ import { PlayerType } from '../../../types/PlayerType';
 import axios from 'axios';
 import ModalStyled from '../../../components/ModalStyled';
 
-type ModalNewPlayerProps = {
+type ModalPlayerProps = {
   show: boolean;
   onClose: (refresh?: boolean) => void;
   setPlayers: React.Dispatch<React.SetStateAction<PlayerType[] | null>>;
   playerToEdit?: PlayerType | null;
 };
 
-const ModalNewPlayer: React.FC<ModalNewPlayerProps> = ({
+const ModalPlayer: React.FC<ModalPlayerProps> = ({
   show,
   onClose,
   setPlayers,
@@ -142,4 +142,4 @@ const ModalNewPlayer: React.FC<ModalNewPlayerProps> = ({
   );
 };
 
-export default ModalNewPlayer;
+export default ModalPlayer;

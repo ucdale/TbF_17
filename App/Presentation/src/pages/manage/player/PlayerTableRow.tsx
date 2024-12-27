@@ -16,7 +16,8 @@ import { PlayerType } from '../../../types/PlayerType';
 import StyledMenu from '../../../components/StyledMenu';
 import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
+// import ArchiveIcon from '@mui/icons-material/Archive';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Transition from '../../../components/Trasition';
 // import {
 //   DialogsProvider,
@@ -111,8 +112,8 @@ const PlayerTableRow: React.FC<PlayerTableRowProps> = ({
                 }}
                 disableRipple
               >
-                <ArchiveIcon />
-                Archive
+                <DeleteIcon />
+                Delete
               </MenuItem>
             </StyledMenu>
           </div>

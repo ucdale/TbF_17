@@ -5,7 +5,8 @@ import { PlayerInTeamType, TeamType } from '../../../types/TeamType';
 import StyledMenu from '../../../components/StyledMenu';
 import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
+// import ArchiveIcon from '@mui/icons-material/Archive';
+import DeleteIcon from '@mui/icons-material/Delete';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 
 type TeamTableRowProps = {
@@ -77,8 +78,8 @@ const TeamTableRow: React.FC<TeamTableRowProps> = ({ team }) => {
               </MenuItem>
               <Divider sx={{ my: 0.5 }} />
               <MenuItem onClick={handleClose} disableRipple>
-                <ArchiveIcon />
-                Archive
+                <DeleteIcon />
+                Delete
               </MenuItem>
             </StyledMenu>
           </div>
