@@ -1,21 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  ButtonGroup,
-  ClickAwayListener,
-  Grow,
-  IconButton,
-  MenuItem,
-  MenuList,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
-} from '@mui/material';
-import axios from 'axios';
+import React from 'react';
+import { IconButton, MenuItem, TableCell, TableRow } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import { PlayerInTeamType, TeamType } from '../../../types/TeamType';
 import StyledMenu from '../../../components/StyledMenu';
@@ -23,7 +7,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 type TeamTableRowProps = {
   team: TeamType;
