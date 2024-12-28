@@ -5,6 +5,6 @@ export type PlayerInTeamType = {
 
 export type TeamType = {
   _id: string;
-  name: string;
-  players: [PlayerInTeamType, PlayerInTeamType];
+  type: 'team';
+  team: { name: string; players: [PlayerInTeamType, PlayerInTeamType] };
 };

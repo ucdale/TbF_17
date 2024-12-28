@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import AlarmIcon from '@mui/icons-material/Alarm';
 import {
-  Box,
   Button,
   CircularProgress,
   Dialog,
@@ -9,29 +7,17 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider,
-  Fab,
   Grid2 as Grid,
-  MenuItem,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
+  TableContainer
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
-import MatchBox from '../../components/Matches/MatchBox';
 import { MatchType } from '../../types/MatchType';
-import ItemBox from '../../components/ItemBox';
-import { MoreVert } from '@mui/icons-material';
 import ModalCreateEditMatch from './ModalCreateEditMatch';
 import Transition from '../../components/Trasition';
-import EditIcon from '@mui/icons-material/Edit';
-import StyledMenu from '../../components/StyledMenu';
-import DeleteIcon from '@mui/icons-material/Delete';
+import FinishedMatchesTable from './FinishedMatchesTable';
+import OnGoingMatchesBox from './OnGoingMatchesBox';
 
 const Home: React.FC = () => {
   const [matches, setMatches] = useState<MatchType[] | null>(null);
@@ -39,16 +25,6 @@ const Home: React.FC = () => {
   const [matchToEnd, setMatchToEnd] = useState<MatchType | null>(null);
   const [matchToEdit, setMatchToEdit] = useState<MatchType | null>(null);
   const [matchToDelete, setMatchToDelete] = useState<MatchType | null>(null);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const isSomeOngoingdMatches = useMemo(
     () =>
@@ -189,83 +165,13 @@ const Home: React.FC = () => {
                 {matches.map(
                   (match: MatchType) =>
                     match.status === 'ongoing' && (
-                      <Box
-                        sx={{ display: 'grid', gridAutoColumns: '1fr', gap: 3 }}
-                      >
-                        <ItemBox
-                          key={match._id}
-                          sx={{ gridRow: '1', gridColumn: 'span 6' }}
-                        >
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'flex-end',
-                              marginBottom: '24px'
-                            }}
-                          >
-                            <Fab
-                              onClick={handleClick}
-                              size='small'
-                              color='secondary'
-                              sx={{ mr: 1 }}
-                            >
-                              <MoreVert />
-                            </Fab>
-                            <StyledMenu
-                              anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left'
-                              }}
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left'
-                              }}
-                              id='demo-customized-menu'
-                              MenuListProps={{
-                                'aria-labelledby': 'demo-customized-button'
-                              }}
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose}
-                            >
-                              <MenuItem
-                                onClick={() => {
-                                  handleClose();
-                                  setMatchToEdit(match);
-                                  setShowModaleCreaEditMatch(true);
-                                }}
-                                disableRipple
-                              >
-                                <EditIcon />
-                                Edit match
-                              </MenuItem>
-                              <Divider sx={{ my: 0.5 }} />
-                              <MenuItem
-                                onClick={() => {
-                                  handleClose();
-                                  setMatchToDelete(match);
-                                }}
-                                disableRipple
-                              >
-                                <DeleteIcon />
-                                Delete
-                              </MenuItem>
-                            </StyledMenu>
-                            <Fab
-                              size='medium'
-                              color='primary'
-                              variant='extended'
-                              onClick={() => {
-                                setMatchToEnd(match);
-                              }}
-                            >
-                              <AlarmIcon sx={{ mr: 1 }} />
-                              End
-                            </Fab>
-                          </div>
-                          <MatchBox match={match} />
-                        </ItemBox>
-                      </Box>
+                      <OnGoingMatchesBox
+                        match={match}
+                        setMatchToEnd={setMatchToEnd}
+                        setMatchToEdit={setMatchToEdit}
+                        setMatchToDelete={setMatchToDelete}
+                        setShowModaleCreaEditMatch={setShowModaleCreaEditMatch}
+                      />
                     )
                 )}
               </Grid>
@@ -280,46 +186,11 @@ const Home: React.FC = () => {
           </Grid>
           <div className='finishedMatches-div'>
             <TableContainer component={Paper}>
-              <Table
-                sx={{ minWidth: 650 }}
-                size='small'
-                aria-label='a dense table'
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Team Red</TableCell>
-                    <TableCell>Team Blue</TableCell>
-                    <TableCell>Score</TableCell>
-                    <TableCell>Date</TableCell>
-                  </TableRow>
-                </TableHead>
-                {isSomeCompletedMatches && (
-                  <TableBody>
-                    {matches.map(
-                      (match) =>
-                        match.status === 'completed' && (
-                          <TableRow
-                            key={match._id}
-                            sx={{
-                              '&:last-child td, &:last-child th': { border: 0 }
-                            }}
-                          >
-                            <TableCell component='th' scope='row'>
-                              {match.teamRed.name}
-                            </TableCell>
-                            <TableCell>{match.teamBlue.name}</TableCell>
-                            <TableCell>
-                              {match.teamRed.score} - {match.teamBlue.score}
-                            </TableCell>
-                            <TableCell>
-                              {new Date(match.date).toLocaleDateString('it-IT')}
-                            </TableCell>
-                          </TableRow>
-                        )
-                    )}
-                  </TableBody>
-                )}
-              </Table>
+              <FinishedMatchesTable
+                isSomeCompletedMatches={isSomeCompletedMatches}
+                matches={matches}
+                setMatchToDelete={setMatchToDelete}
+              />
               {!isSomeCompletedMatches && (
                 <h3>No completed matches played yet ...</h3>
               )}
