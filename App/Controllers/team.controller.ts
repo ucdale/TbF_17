@@ -20,6 +20,33 @@ class TeamController {
     }
   }
 
+  static async getAllEligibleTeamsByName(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { term, excludeName } = req.query;
+
+      const selector: any = {
+        type: 'team',
+        'team.name': { $regex: term ? `(?i)${term}` : '' }
+      };
+
+      if (excludeName) {
+        selector['team.name'].$ne = excludeName;
+      }
+
+      const response = await db.find({ selector });
+      const teams = response.docs.map((doc: any) => ({
+        _id: doc._id,
+        ...doc.team
+      }));
+      res.json(teams);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching teams' });
+    }
+  }
+
   static async createTeam(req: Request, res: Response): Promise<void> {
     try {
       const { name, strikerPlayer, defenderPlayer } = req.body;

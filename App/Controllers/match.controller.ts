@@ -55,6 +55,8 @@
 
 import { Request, Response } from 'express';
 import nano from 'nano';
+import { v4 as uuidv4 } from 'uuid';
+import { isMatchType, MatchType } from '../Models/Match';
 
 const couch = nano('http://admin:admin@127.0.0.1:5984');
 const db = couch.db.use('tbf17');
@@ -75,12 +77,73 @@ class MatchController {
 
   static async createMatch(req: Request, res: Response): Promise<void> {
     try {
-      const match = req.body;
-      match.type = 'match';
-      const response = await db.insert(match);
-      res.json(response);
+      const { redTeam, blueTeam } = req.body;
+
+      const initializedRedTeam = {
+        ...redTeam,
+        score: 0
+      };
+
+      const initializedBlueTeam = {
+        ...blueTeam,
+        score: 0
+      };
+
+      const matchDate = new Date().toISOString();
+
+      const matchDoc = {
+        _id: `${redTeam.name}_${blueTeam.name}_${matchDate}`,
+        type: 'match',
+        match: {
+          teamRed: initializedRedTeam,
+          teamBlue: initializedBlueTeam,
+          status: 'ongoing',
+          date: matchDate
+        }
+      };
+
+      const response = await db.insert(matchDoc);
+      res.json({ success: response.ok, _id: response.id, ...matchDoc });
     } catch (error) {
       res.status(500).json({ error: 'Error creating match' });
+    }
+  }
+
+  static async endMatch(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.body;
+
+      const matchDoc = await db.get(id);
+
+      if (!isMatchType(matchDoc)) {
+        res.status(400).json({ error: 'Invalid match document' });
+        return;
+      }
+
+      // Modifica il campo status del match a 'completed'
+      matchDoc.match.status = 'completed';
+
+      // Aggiorna il documento nel database
+      const response = await db.insert(matchDoc);
+      res.json({ success: response.ok, _id: response.id });
+    } catch (error) {
+      res.status(500).json({ error: 'Error ending match' });
+    }
+  }
+
+  static async deleteMatch(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.body;
+      console.log('>>>>>>>>>>>>>>>>>>>', id);
+
+      const matchDoc = await db.get(id);
+
+      console.log('>>>>>>>>>>>>>>>>>>>', matchDoc._rev);
+
+      const response = await db.destroy(id, matchDoc._rev);
+      res.json({ success: response.ok, _id: response.id });
+    } catch (error) {
+      res.status(500).json({ error: 'Error deleting match' });
     }
   }
 }
