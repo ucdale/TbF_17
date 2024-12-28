@@ -133,7 +133,7 @@ const ModalCreateEditPlayer: React.FC<ModalCreateEditPlayerProps> = ({
             {playerToEdit ? 'Edit' : 'Add'}
           </Button>
           {/* <Button color='secondary' onClick={handleCloseModaleCrePlayer}>
-              Cancel
+              Back
             </Button> */}
         </Box>
       </div>

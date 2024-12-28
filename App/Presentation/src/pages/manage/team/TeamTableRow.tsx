@@ -154,7 +154,7 @@ const TeamTableRow: React.FC<TeamTableRowProps> = ({
           <DialogActions>
             <Button onClick={() => deleteTeam(team._id)}>Delete</Button>
             <Button variant='contained' onClick={handleCloseConfirmDialog}>
-              Cancel
+              Back
             </Button>
           </DialogActions>
         </Dialog>

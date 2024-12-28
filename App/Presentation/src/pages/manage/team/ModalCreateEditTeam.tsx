@@ -385,7 +385,7 @@ const ModalCreateEditTeam: React.FC<ModalCreateEditTeamProps> = ({
             {teamToEdit ? 'Edit' : 'Add'}
           </Button>
           {/* <Button color='secondary' onClick={handleCloseModaleCreTeam}>
-              Cancel
+              Back
             </Button> */}
         </Box>
       </div>

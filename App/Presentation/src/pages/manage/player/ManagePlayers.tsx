@@ -86,7 +86,7 @@ const ManagePlayers: React.FC = () => {
         <Grid size={12}>
           <div className='header-container'>
             <h1 className='header-title' style={{ marginBottom: '40px' }}>
-              Manage Teams
+              Manage Players
             </h1>
           </div>
         </Grid>

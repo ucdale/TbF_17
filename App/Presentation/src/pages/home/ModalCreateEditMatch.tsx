@@ -110,7 +110,10 @@ const ModalCreateEditMatch: React.FC<ModalCreateEditMatchProps> = ({
         const response = await axios.get(
           'http://localhost:3001/team/getAllEligibleTeamsByName',
           {
-            params: { term: searchTerm, excludeName: redTeam?.name }
+            params: {
+              term: searchTerm,
+              excludeName: redTeam?.name || blueTeam?.name
+            }
           }
         );
         setTeamOptions(response.data);
@@ -119,10 +122,10 @@ const ModalCreateEditMatch: React.FC<ModalCreateEditMatchProps> = ({
       }
     };
 
-    if (searchTerm) {
+    if (searchTerm !== null) {
       fetchPlayers();
     }
-  }, [searchTerm, name, redTeam?.name]);
+  }, [searchTerm, name, redTeam?.name, blueTeam?.name]);
 
   return (
     <ModalStyled
@@ -156,6 +159,9 @@ const ModalCreateEditMatch: React.FC<ModalCreateEditMatchProps> = ({
               filterSelectedOptions
               value={redTeam}
               noOptionsText='No teams'
+              onFocus={() => {
+                setSearchTerm('');
+              }}
               onChange={(event: any, newValue: TeamType | null) => {
                 setTeamOptions(
                   newValue ? [newValue, ...teamOptions] : teamOptions
@@ -241,6 +247,9 @@ const ModalCreateEditMatch: React.FC<ModalCreateEditMatchProps> = ({
               filterSelectedOptions
               value={blueTeam}
               noOptionsText='No teams'
+              onFocus={() => {
+                setSearchTerm('');
+              }}
               onChange={(event: any, newValue: TeamType | null) => {
                 setTeamOptions(
                   newValue ? [newValue, ...teamOptions] : teamOptions
@@ -302,7 +311,7 @@ const ModalCreateEditMatch: React.FC<ModalCreateEditMatchProps> = ({
             {matchToEdit ? 'Edit' : 'Add'}
           </Button>
           {/* <Button color='secondary' onClick={handleCloseModaleCreMatch}>
-              Cancel
+              Back
             </Button> */}
         </Box>
       </div>

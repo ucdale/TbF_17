@@ -157,7 +157,7 @@ const Home: React.FC = () => {
             <Grid size={12}>
               <div className='header-container'>
                 <h1 className='header-title'>Ongoing matches</h1>
-                {matches.length > 0 && (
+                {isSomeOngoingdMatches && (
                   <div className='button-container'>
                     <Button
                       onClick={() => setShowModaleCreaEditMatch(true)}
@@ -256,7 +256,6 @@ const Home: React.FC = () => {
                               color='primary'
                               variant='extended'
                               onClick={() => {
-                                debugger;
                                 setMatchToEnd(match);
                               }}
                             >
@@ -344,7 +343,7 @@ const Home: React.FC = () => {
           onClose={handleCloseConfirmDialog}
           aria-describedby='alert-dialog-slide-description'
         >
-          <DialogTitle>{`Delete match ${matchToEnd.teamRed.name} vs ${matchToEnd.teamBlue.name} ?`}</DialogTitle>
+          <DialogTitle>{`End match ${matchToEnd.teamRed.name} vs ${matchToEnd.teamBlue.name} ?`}</DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-slide-description'>
               This action cannot be undone.
@@ -353,7 +352,7 @@ const Home: React.FC = () => {
           <DialogActions>
             <Button onClick={() => endMatch(matchToEnd._id)}>End</Button>
             <Button variant='contained' onClick={() => setMatchToEnd(null)}>
-              Cancel
+              Back
             </Button>
           </DialogActions>
         </Dialog>
@@ -377,7 +376,7 @@ const Home: React.FC = () => {
               Delete
             </Button>
             <Button variant='contained' onClick={() => setMatchToDelete(null)}>
-              Cancel
+              Back
             </Button>
           </DialogActions>
         </Dialog>

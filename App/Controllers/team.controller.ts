@@ -27,10 +27,18 @@ class TeamController {
     try {
       const { term, excludeName } = req.query;
 
-      const selector: any = {
-        type: 'team',
-        'team.name': { $regex: term ? `(?i)${term}` : '' }
-      };
+      let selector;
+
+      if (term !== '' || term !== null) {
+        selector = {
+          type: 'team',
+          'team.name': { $regex: term ? `(?i)${term}` : '' }
+        };
+      } else {
+        selector = {
+          type: 'team'
+        };
+      }
 
       if (excludeName) {
         selector['team.name'].$ne = excludeName;

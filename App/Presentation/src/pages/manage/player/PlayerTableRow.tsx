@@ -134,7 +134,7 @@ const PlayerTableRow: React.FC<PlayerTableRowProps> = ({
           <DialogActions>
             <Button onClick={() => deletePlayer(player._id)}>Delete</Button>
             <Button variant='contained' onClick={handleCloseConfirmDialog}>
-              Cancel
+              Back
             </Button>
           </DialogActions>
         </Dialog>
