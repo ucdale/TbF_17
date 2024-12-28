@@ -306,7 +306,14 @@ const ModalCreateEditMatch: React.FC<ModalCreateEditMatchProps> = ({
                 ? () => modificaMatch(matchToEdit!._id, name + '')
                 : () => aggiungiMatch()
             }
-            disabled={redTeam?.name === '' || blueTeam?.name === null}
+            disabled={
+              !redTeam ||
+              redTeam?.name === '' ||
+              redTeam?.name === null ||
+              !blueTeam ||
+              blueTeam?.name === '' ||
+              blueTeam?.name === null
+            }
           >
             {matchToEdit ? 'Edit' : 'Add'}
           </Button>

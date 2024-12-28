@@ -55,12 +55,7 @@ const ModalCreateEditTeam: React.FC<ModalCreateEditTeamProps> = ({
   }, []);
 
   useEffect(() => {
-    if (
-      !strikerEffectExecuted &&
-      !strikerPlayer &&
-      teamToEdit &&
-      teamToEdit.action === 'editMembers'
-    ) {
+    if (!strikerEffectExecuted && !strikerPlayer && teamToEdit) {
       setStrikerPlayer(
         teamToEdit.players.find((x) => x.position === 'striker') || null
       );
@@ -69,12 +64,7 @@ const ModalCreateEditTeam: React.FC<ModalCreateEditTeamProps> = ({
   }, [strikerEffectExecuted, strikerPlayer, teamToEdit]);
 
   useEffect(() => {
-    if (
-      !defenderEffectExecuted &&
-      !defenderPlayer &&
-      teamToEdit &&
-      teamToEdit.action === 'editMembers'
-    ) {
+    if (!defenderEffectExecuted && !defenderPlayer && teamToEdit) {
       setDefenderPlayer(
         teamToEdit.players.find((x) => x.position === 'defender') || null
       );
@@ -376,10 +366,18 @@ const ModalCreateEditTeam: React.FC<ModalCreateEditTeamProps> = ({
                 : () => aggiungiTeam()
             }
             disabled={
-              (teamToEdit?.action === 'editName' &&
-                (name === '' || name === null)) ||
-              (teamToEdit?.action === 'editMembers' &&
-                (strikerPlayer?.name === '' || defenderPlayer?.name === ''))
+              teamToEdit
+                ? (teamToEdit?.action === 'editName' &&
+                    (name === '' || name === null)) ||
+                  (teamToEdit?.action === 'editMembers' &&
+                    (!strikerPlayer ||
+                      strikerPlayer?.name === '' ||
+                      !defenderPlayer ||
+                      defenderPlayer?.name === ''))
+                : !strikerPlayer ||
+                  strikerPlayer?.name === '' ||
+                  !defenderPlayer ||
+                  defenderPlayer?.name === ''
             }
           >
             {teamToEdit ? 'Edit' : 'Add'}
