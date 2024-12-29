@@ -7,7 +7,7 @@ type TeamTableRowProps = {
 
 const TeamTableRow: React.FC<TeamTableRowProps> = ({ team }) => {
   return (
-    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+    <TableRow hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
       <TableCell component='th' scope='row'>
         {team.name}
       </TableCell>

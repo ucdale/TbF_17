@@ -1,20 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  CircularProgress,
-  Grid2 as Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
-} from '@mui/material';
-import { TeamType } from '../../../types/TeamType';
+import { CircularProgress, Grid2 as Grid } from '@mui/material';
 import axios from 'axios';
-import TeamTableRow from './TeamTableRow';
-import AddIcon from '@mui/icons-material/Add';
+import SortableTable from './SortableTable';
 
 const BestTeams: React.FC = () => {
   const [teams, setTeams] = useState<{ name: string; wins: number }[] | null>(
@@ -51,6 +38,28 @@ const BestTeams: React.FC = () => {
     }
   }, [teams, ottieniTeams]);
 
+  interface HeadCell {
+    disablePadding: boolean;
+    id: keyof { name: string; wins: number };
+    label: string;
+    numeric: boolean;
+  }
+
+  const headCells: HeadCell[] = [
+    {
+      id: 'name',
+      numeric: false,
+      disablePadding: true,
+      label: 'Name'
+    },
+    {
+      id: 'wins',
+      numeric: true,
+      disablePadding: false,
+      label: 'Wins'
+    }
+  ];
+
   return (
     <div className='manageTable-div'>
       <Grid container spacing={1}>
@@ -64,29 +73,9 @@ const BestTeams: React.FC = () => {
       </Grid>
       <div style={{ marginTop: '40px' }}>
         {teams ? (
-          <TableContainer component={Paper}>
-            <Table
-              sx={{ minWidth: 650 }}
-              size='small'
-              aria-label='a dense table'
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell align='right'>Wins</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {teams && teams.length > 0 ? (
-                  teams.map((team) => (
-                    <TeamTableRow key={team.name} team={team} />
-                  ))
-                ) : (
-                  <h3>There are no teams yet ...</h3>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <div>
+            <SortableTable headCells={headCells} rows={teams} />
+          </div>
         ) : (
           <CircularProgress sx={{ marginTop: '40' }} size={40} />
         )}
