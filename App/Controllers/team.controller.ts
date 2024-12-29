@@ -67,12 +67,12 @@ class TeamController {
           players: [
             {
               position: 'striker',
-              id: strikerPlayer._id,
+              _id: strikerPlayer._id,
               name: strikerPlayer.name
             },
             {
               position: 'defender',
-              id: defenderPlayer._id,
+              _id: defenderPlayer._id,
               name: defenderPlayer.name
             }
           ]
@@ -97,13 +97,13 @@ class TeamController {
 
       let newStriker = {
         position: 'striker',
-        id: strikerPlayer._id,
+        _id: strikerPlayer._id,
         name: strikerPlayer.name
       };
 
       let newDefender = {
         position: 'defender',
-        id: defenderPlayer._id,
+        _id: defenderPlayer._id,
         name: defenderPlayer.name
       };
 

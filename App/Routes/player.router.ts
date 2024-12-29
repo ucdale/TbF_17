@@ -16,6 +16,11 @@ router.post(
   authenticate,
   PlayerController.updatePlayerName
 );
+router.post(
+  '/updatePlayerGoals',
+  authenticate,
+  PlayerController.updatePlayerGoals
+);
 router.post('/deletePlayer', authenticate, PlayerController.deletePlayer);
 
 export default router;

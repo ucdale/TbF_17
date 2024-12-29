@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import nano from 'nano';
 import { v4 as uuidv4 } from 'uuid';
+import { isPlayerType } from '../Models/Player';
 
 const couch = nano('http://admin:admin@127.0.0.1:5984');
 const db = couch.db.use('tbf17');
@@ -84,6 +85,30 @@ class PlayerController {
       res.json({ success: response.ok, _id: response.id, ...playerDoc.player });
     } catch (error) {
       res.status(500).json({ error: 'Error updating player name' });
+    }
+  }
+
+  static async updatePlayerGoals(req: Request, res: Response): Promise<void> {
+    try {
+      const { id, goals } = req.body;
+
+      // sotto si può usare db.head per avere solo l'header del documento (con il rev)
+      const playerDoc = await db.get(id);
+
+      if (!isPlayerType(playerDoc)) {
+        res.status(400).json({ error: 'Invalid match document' });
+        return;
+      }
+
+      playerDoc.player.goals = playerDoc.player.goals + goals;
+
+      const response = await db.insert({
+        ...playerDoc,
+        _rev: playerDoc._rev // Include the _rev to update the existing document
+      });
+      res.json({ success: response.ok, _id: response.id, ...playerDoc.player });
+    } catch (error) {
+      res.status(500).json({ error: 'Error updating player goals' });
     }
   }
 

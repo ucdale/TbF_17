@@ -131,6 +131,64 @@ class MatchController {
     }
   }
 
+  static async updateMatchScore(req: Request, res: Response): Promise<void> {
+    try {
+      const {
+        id,
+        redTeamScore,
+        blueTeamScore,
+        redStrikerGoals,
+        redDefenderGoals,
+        blueStrikerGoals,
+        blueDefenderGoals
+      } = req.body;
+
+      const matchDoc = await db.get(id);
+
+      if (!isMatchType(matchDoc)) {
+        res.status(400).json({ error: 'Invalid match document' });
+        return;
+      }
+
+      if (redTeamScore) {
+        matchDoc.match.teamRed.score = redTeamScore;
+      }
+      if (blueTeamScore) {
+        matchDoc.match.teamBlue.score = blueTeamScore;
+      }
+
+      if (redStrikerGoals) {
+        matchDoc.match.teamRed.players.find(
+          (x) => x.position === 'striker'
+        ).goals = redStrikerGoals;
+      }
+
+      if (redDefenderGoals) {
+        matchDoc.match.teamRed.players.find(
+          (x) => x.position === 'defender'
+        ).goals = redDefenderGoals;
+      }
+
+      if (blueStrikerGoals) {
+        matchDoc.match.teamBlue.players.find(
+          (x) => x.position === 'striker'
+        ).goals = blueStrikerGoals;
+      }
+
+      if (blueDefenderGoals) {
+        matchDoc.match.teamBlue.players.find(
+          (x) => x.position === 'defender'
+        ).goals = blueDefenderGoals;
+      }
+
+      // Aggiorna il documento nel database
+      const response = await db.insert(matchDoc);
+      res.json({ success: response.ok, _id: response.id });
+    } catch (error) {
+      res.status(500).json({ error: 'Error ending match' });
+    }
+  }
+
   static async deleteMatch(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.body;

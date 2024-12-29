@@ -64,8 +64,8 @@ export type MatchType = {
   _id: string;
   type: 'match';
   match: {
-    teamRed: TeamInMatchType & { score: number };
-    teamBlue: TeamType & { score: number };
+    teamRed: TeamInMatchType;
+    teamBlue: TeamInMatchType;
     status: 'ongoing' | 'completed';
     date: Date;
   };

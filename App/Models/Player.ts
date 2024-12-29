@@ -7,3 +7,7 @@ export type PlayerType = {
     blocks: number;
   };
 };
+
+export function isPlayerType(doc: any): doc is PlayerType {
+  return doc && doc.type === 'player' && doc.player;
+}

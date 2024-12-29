@@ -186,6 +186,7 @@ const Home: React.FC = () => {
                   (match: MatchType) =>
                     match.status === 'ongoing' && (
                       <OnGoingMatchesBox
+                        key={match._id}
                         match={match}
                         setMatchToEnd={setMatchToEnd}
                         setMatchToEdit={setMatchToEdit}

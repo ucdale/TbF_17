@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   Box,
@@ -27,6 +27,38 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
   onClose,
   match
 }) => {
+  const originalStrikerInRedTeam = useMemo(
+    () =>
+      match.teamRed.players.find(
+        (player: PlayerInMatchType) => player.position === 'striker'
+      ),
+    [match.teamRed.players]
+  );
+
+  const originalDefenderInRedTeam = useMemo(
+    () =>
+      match.teamRed.players.find(
+        (player: PlayerInMatchType) => player.position === 'defender'
+      ),
+    [match.teamRed.players]
+  );
+
+  const originalStrikerInBlueTeam = useMemo(
+    () =>
+      match.teamBlue.players.find(
+        (player: PlayerInMatchType) => player.position === 'striker'
+      ),
+    [match.teamBlue.players]
+  );
+
+  const originalDefenderInBlueTeam = useMemo(
+    () =>
+      match.teamBlue.players.find(
+        (player: PlayerInMatchType) => player.position === 'defender'
+      ),
+    [match.teamBlue.players]
+  );
+
   const [error, setError] = useState({ show: false, Message: '' });
   const [redTeamScore, setRedTeamScore] = useState<number | null>(
     match.teamRed.score
@@ -35,24 +67,16 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
     match.teamBlue.score
   );
   const [redTeamPlayerStriker, setRedTeamPlayerStriker] = useState(
-    match.teamRed.players.find(
-      (player: PlayerInMatchType) => player.position === 'striker'
-    )
+    originalStrikerInRedTeam
   );
   const [redTeamPlayerDefender, setRedTeamPlayerDefender] = useState(
-    match.teamRed.players.find(
-      (player: PlayerInMatchType) => player.position === 'defender'
-    )
+    originalDefenderInRedTeam
   );
   const [blueTeamPlayerStriker, setBlueTeamPlayerStriker] = useState(
-    match.teamBlue.players.find(
-      (player: PlayerInMatchType) => player.position === 'striker'
-    )
+    originalStrikerInBlueTeam
   );
   const [blueTeamPlayerDefender, setBlueTeamPlayerDefender] = useState(
-    match.teamBlue.players.find(
-      (player: PlayerInMatchType) => player.position === 'defender'
-    )
+    originalDefenderInBlueTeam
   );
 
   const resetDati = useCallback(() => {
@@ -97,32 +121,32 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
 
   useEffect(() => {
     if (
-      redTeamPlayerStriker &&
-      typeof redTeamPlayerStriker.goals === 'number' &&
-      redTeamPlayerDefender &&
-      typeof redTeamPlayerDefender.goals === 'number'
+      typeof redTeamPlayerStriker?.goals === 'number' ||
+      typeof redTeamPlayerDefender?.goals === 'number'
     ) {
-      setRedTeamScore(redTeamPlayerStriker.goals + redTeamPlayerDefender.goals);
+      setRedTeamScore(
+        (redTeamPlayerStriker?.goals || 0) + (redTeamPlayerDefender?.goals || 0)
+      );
     }
   }, [redTeamPlayerDefender, redTeamPlayerStriker]);
 
   useEffect(() => {
     if (
-      blueTeamPlayerStriker &&
-      typeof blueTeamPlayerStriker.goals === 'number' &&
-      blueTeamPlayerDefender &&
-      typeof blueTeamPlayerDefender.goals === 'number'
+      typeof blueTeamPlayerStriker?.goals === 'number' ||
+      typeof blueTeamPlayerDefender?.goals === 'number'
     ) {
-      setRedTeamScore(
-        blueTeamPlayerStriker.goals + blueTeamPlayerDefender.goals
+      setBlueTeamScore(
+        (blueTeamPlayerStriker?.goals || 0) +
+          (blueTeamPlayerDefender?.goals || 0)
       );
     }
   }, [blueTeamPlayerDefender, blueTeamPlayerStriker]);
 
   const modificaGoalPlayer = useCallback(async (id: string, goals: number) => {
     try {
+      debugger;
       const response = await axios.post(
-        'http://localhost:3001/player/updateGoals',
+        'http://localhost:3001/player/updatePlayerGoals',
         {
           id,
           goals
@@ -140,17 +164,64 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
 
   const modificaPunteggioMatch = useCallback(
     async (id: string) => {
+      const params: {
+        id: string;
+        redTeamScore?: number;
+        blueTeamScore?: number;
+        redStrikerGoals?: number;
+        redDefenderGoals?: number;
+        blueStrikerGoals?: number;
+        blueDefenderGoals?: number;
+      } = { id: match._id };
+
+      if (redTeamScore !== match.teamRed.score) {
+        params.redTeamScore = redTeamScore || 0;
+      }
+
+      if (blueTeamScore !== match.teamBlue.score) {
+        params.blueTeamScore = blueTeamScore || 0;
+      }
+
+      if (
+        redTeamPlayerStriker &&
+        originalStrikerInRedTeam &&
+        redTeamPlayerStriker.goals !== originalStrikerInRedTeam.goals
+      ) {
+        params.redStrikerGoals = redTeamPlayerStriker.goals || 0;
+      }
+
+      if (
+        redTeamPlayerDefender &&
+        originalDefenderInRedTeam &&
+        redTeamPlayerDefender.goals !== originalDefenderInRedTeam.goals
+      ) {
+        params.redDefenderGoals = redTeamPlayerDefender.goals || 0;
+      }
+
+      if (
+        blueTeamPlayerStriker &&
+        originalStrikerInBlueTeam &&
+        blueTeamPlayerStriker.goals !== originalStrikerInBlueTeam.goals
+      ) {
+        params.blueStrikerGoals = blueTeamPlayerStriker.goals || 0;
+      }
+
+      if (
+        blueTeamPlayerDefender &&
+        originalDefenderInBlueTeam &&
+        blueTeamPlayerDefender.goals !== originalDefenderInBlueTeam.goals
+      ) {
+        params.blueDefenderGoals = blueTeamPlayerDefender.goals || 0;
+      }
+
       try {
         const response = await axios.post(
           'http://localhost:3001/match/updateMatchScore',
-          {
-            id,
-            redTeamScore,
-            blueTeamScore
-          }
+          params
         );
         if (response.status === 200) {
           console.log('Match name updated successfully:', response.data);
+          onClose(true);
         } else {
           console.error(
             'Error updating match name:',
@@ -161,35 +232,103 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
         console.error('Error updating match name:', error);
       }
     },
-    [blueTeamScore, redTeamScore]
+    [
+      blueTeamPlayerDefender,
+      blueTeamPlayerStriker,
+      blueTeamScore,
+      match._id,
+      match.teamBlue.score,
+      match.teamRed.score,
+      onClose,
+      originalDefenderInRedTeam,
+      originalStrikerInRedTeam,
+      redTeamPlayerDefender,
+      redTeamPlayerStriker,
+      redTeamScore
+    ]
   );
 
-  // const saveScoresForMatchAndPlayers = useCallback(
-  //   (matchId: string) => {
-  //     if (redTeamPlayerOneScore !== match.teamRed.players)
-  //       try {
-  //         const response = await axios.post(
-  //           'http://localhost:3001/match/updateMatchScore',
-  //           {
-  //             matchId,
-  //             redTeamScore,
-  //             blueTeamScore
-  //           }
-  //         );
-  //         if (response.status === 200) {
-  //           console.log('Match name updated successfully:', response.data);
-  //         } else {
-  //           console.error(
-  //             'Error updating match name:',
-  //             'qualcosa è andato storto'
-  //           );
-  //         }
-  //       } catch (error) {
-  //         console.error('Error updating match name:', error);
-  //       }
-  //   },
-  //   [blueTeamScore, redTeamScore]
-  // );
+  const idsOfPlayersWithChangedGoals = useCallback(() => {
+    let ids: { _id: string; goals: number }[] = [];
+    if (
+      redTeamPlayerStriker &&
+      originalStrikerInRedTeam &&
+      redTeamPlayerStriker.goals !== originalStrikerInRedTeam.goals
+    ) {
+      ids.push({
+        _id: originalStrikerInRedTeam._id,
+        goals: redTeamPlayerStriker.goals || 0
+      });
+    }
+
+    if (
+      redTeamPlayerDefender &&
+      originalDefenderInRedTeam &&
+      redTeamPlayerDefender.goals !== originalDefenderInRedTeam.goals
+    ) {
+      ids.push({
+        _id: originalDefenderInRedTeam._id,
+        goals: redTeamPlayerDefender.goals || 0
+      });
+    }
+
+    if (
+      blueTeamPlayerStriker &&
+      originalStrikerInRedTeam &&
+      blueTeamPlayerStriker.goals !== originalStrikerInRedTeam.goals
+    ) {
+      ids.push({
+        _id: originalStrikerInRedTeam._id,
+        goals: blueTeamPlayerStriker.goals || 0
+      });
+    }
+
+    if (
+      blueTeamPlayerDefender &&
+      originalDefenderInRedTeam &&
+      blueTeamPlayerDefender.goals !== originalDefenderInRedTeam.goals
+    ) {
+      ids.push({
+        _id: originalDefenderInRedTeam._id,
+        goals: blueTeamPlayerDefender.goals || 0
+      });
+    }
+    return ids;
+  }, [
+    blueTeamPlayerDefender,
+    blueTeamPlayerStriker,
+    originalDefenderInRedTeam,
+    originalStrikerInRedTeam,
+    redTeamPlayerDefender,
+    redTeamPlayerStriker
+  ]);
+
+  const saveScoresForMatchAndPlayers = useCallback(
+    async (matchId: string) => {
+      const playerIdsToModifyGoals: { _id: string; goals: number }[] =
+        idsOfPlayersWithChangedGoals();
+
+      const updatePromises = playerIdsToModifyGoals.map((p) => {
+        if (p) {
+          return modificaGoalPlayer(p._id, p.goals);
+        }
+        return Promise.resolve();
+      });
+
+      // TODO dovrebbe occuparsene il backend con un saga ma per ora faccio così
+      try {
+        await Promise.all(updatePromises);
+        console.log('All player goals updated successfully');
+        modificaPunteggioMatch(matchId);
+      } catch (error) {
+        setError({
+          show: true,
+          Message: `Error updating player goals: ${error}`
+        });
+      }
+    },
+    [idsOfPlayersWithChangedGoals, modificaGoalPlayer, modificaPunteggioMatch]
+  );
 
   return (
     <ModalStyled
@@ -248,28 +387,19 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
             flexDirection: { xs: 'column', sm: 'row-reverse' }
           }}
         >
-          {/* <Button
+          <Button
             variant='contained'
-            onClick={
-              matchToEdit
-                ? () => modificaMatch(matchToEdit!._id, name + '')
-                : () => aggiungiMatch()
-            }
+            onClick={() => saveScoresForMatchAndPlayers(match!._id)}
             disabled={
-              !redTeam ||
-              redTeam?.name === '' ||
-              redTeam?.name === null ||
-              !blueTeam ||
-              blueTeam?.name === '' ||
-              blueTeam?.name === null
+              match.teamRed?.score === redTeamScore &&
+              match.teamBlue?.score === blueTeamScore
             }
           >
-            {matchToEdit ? 'Edit' : 'Add'}
+            Edit score
           </Button>
-           <Button color='secondary' onClick={handleCloseModaleCreMatch}>
-              Back
-            </Button>
-            */}
+          <Button color='secondary' onClick={() => onClose(false)}>
+            Back
+          </Button>
         </Box>
       </div>
     </ModalStyled>
