@@ -6,8 +6,9 @@ import ManagePlayers from './player/ManagePlayers';
 const Manage: React.FC = () => {
   return (
     <div>
-      <ManageTeams />
       <ManagePlayers />
+
+      <ManageTeams />
     </div>
   );
 };

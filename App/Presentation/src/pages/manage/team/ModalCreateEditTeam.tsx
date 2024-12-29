@@ -90,9 +90,7 @@ const ModalCreateEditTeam: React.FC<ModalCreateEditTeamProps> = ({
       }
     };
 
-    if (searchTerm) {
-      fetchPlayers();
-    }
+    fetchPlayers();
   }, [searchTerm, name, strikerPlayer?.name]);
 
   const aggiungiTeam = useCallback(async () => {
