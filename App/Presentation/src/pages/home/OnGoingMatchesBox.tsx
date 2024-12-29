@@ -7,7 +7,7 @@ import ItemBox from '../../components/ItemBox';
 import { MoreVert } from '@mui/icons-material';
 import StyledMenu from '../../components/StyledMenu';
 import EditIcon from '@mui/icons-material/Edit';
-import MatchBox from '../../components/Matches/MatchBox';
+import TeamMatchBox from '../../components/Matches/TeamMatchBox';
 import AlarmIcon from '@mui/icons-material/Alarm';
 
 type FinishedMatchesTableProps = {
@@ -15,7 +15,7 @@ type FinishedMatchesTableProps = {
   setMatchToEnd: (match: MatchType) => void;
   setMatchToEdit: (match: MatchType) => void;
   setMatchToDelete: (match: MatchType) => void;
-  setShowModaleCreaEditMatch: (match: boolean) => void;
+  setMatchAndShowModaleEditMatchScore: (match: MatchType) => void;
 };
 
 const OnGoingMatchesBox: React.FC<FinishedMatchesTableProps> = ({
@@ -23,7 +23,7 @@ const OnGoingMatchesBox: React.FC<FinishedMatchesTableProps> = ({
   setMatchToEnd,
   setMatchToEdit,
   setMatchToDelete,
-  setShowModaleCreaEditMatch
+  setMatchAndShowModaleEditMatchScore
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -75,12 +75,12 @@ const OnGoingMatchesBox: React.FC<FinishedMatchesTableProps> = ({
               onClick={() => {
                 handleClose();
                 setMatchToEdit(match);
-                setShowModaleCreaEditMatch(true);
+                setMatchAndShowModaleEditMatchScore(match);
               }}
               disableRipple
             >
               <EditIcon />
-              Edit match
+              Edit score
             </MenuItem>
             <Divider sx={{ my: 0.5 }} />
             <MenuItem
@@ -107,7 +107,7 @@ const OnGoingMatchesBox: React.FC<FinishedMatchesTableProps> = ({
           </Fab>
         </div>
         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
-          <MatchBox match={match} teamRed />
+          <TeamMatchBox match={match} teamRed />
           <div
             style={{
               display: 'flex',
@@ -118,7 +118,7 @@ const OnGoingMatchesBox: React.FC<FinishedMatchesTableProps> = ({
           >
             vs
           </div>
-          <MatchBox match={match} teamBlue />
+          <TeamMatchBox match={match} teamBlue />
         </Box>
       </ItemBox>
     </Box>

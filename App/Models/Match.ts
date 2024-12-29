@@ -45,11 +45,26 @@ import { TeamType } from './Team';
 
 // export default Match;
 
+export type PlayerInMatchType = {
+  _id: string;
+  position: 'striker' | 'defender';
+  name: string;
+  goals: number;
+  blocks: number;
+};
+
+export type TeamInMatchType = {
+  _id: string;
+  name: string;
+  players: [PlayerInMatchType, PlayerInMatchType];
+  score: number;
+};
+
 export type MatchType = {
   _id: string;
   type: 'match';
   match: {
-    teamRed: TeamType & { score: number };
+    teamRed: TeamInMatchType & { score: number };
     teamBlue: TeamType & { score: number };
     status: 'ongoing' | 'completed';
     date: Date;

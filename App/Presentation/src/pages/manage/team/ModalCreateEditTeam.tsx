@@ -1,18 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Autocomplete,
   Box,
   Button,
   FormControl,
-  Grid2,
-  TextField,
-  Typography
+  TextField
 } from '@mui/material';
 import axios from 'axios';
 import ModalStyled from '../../../components/ModalStyled';
 import { PlayerInTeamType, TeamType } from '../../../types/TeamType';
-import parse from 'autosuggest-highlight/parse';
 
 type ModalCreateEditTeamProps = {
   show: boolean;

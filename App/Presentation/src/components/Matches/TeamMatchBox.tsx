@@ -4,13 +4,13 @@ import { MatchType } from '../../types/MatchType';
 import ItemBox from '../ItemBox';
 import { PlayerInTeamType } from '../../types/TeamType';
 
-type MatchBoxProps = {
+type TeamMatchBoxProps = {
   match: MatchType;
   teamRed?: boolean;
   teamBlue?: boolean;
 };
 
-const MatchBox: React.FC<MatchBoxProps> = ({
+const TeamMatchBox: React.FC<TeamMatchBoxProps> = ({
   match,
   teamRed = false,
   teamBlue = false
@@ -86,4 +86,4 @@ const MatchBox: React.FC<MatchBoxProps> = ({
     </ItemBox>
   );
 };
-export default MatchBox;
+export default TeamMatchBox;

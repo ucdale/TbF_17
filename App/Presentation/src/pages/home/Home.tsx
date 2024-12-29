@@ -18,10 +18,13 @@ import ModalCreateEditMatch from './ModalCreateEditMatch';
 import Transition from '../../components/Trasition';
 import FinishedMatchesTable from './FinishedMatchesTable';
 import OnGoingMatchesBox from './OnGoingMatchesBox';
+import ModalEditMatchScore from './ModalEditMatchScore/ModalEditMatchScore';
 
 const Home: React.FC = () => {
   const [matches, setMatches] = useState<MatchType[] | null>(null);
   const [showModaleCreaEditMatch, setShowModaleCreaEditMatch] = useState(false);
+  const [showModaleEditMatchScore, setShowModaleEditMatchScore] =
+    useState(false);
   const [matchToEnd, setMatchToEnd] = useState<MatchType | null>(null);
   const [matchToEdit, setMatchToEdit] = useState<MatchType | null>(null);
   const [matchToDelete, setMatchToDelete] = useState<MatchType | null>(null);
@@ -72,6 +75,23 @@ const Home: React.FC = () => {
 
   const handleCloseModaleCreaEditMatch = useCallback((refresh = false) => {
     setShowModaleCreaEditMatch(false);
+    setMatchToEdit(null);
+    // setError({ show: false, Message: '' });
+    if (refresh) {
+      setMatches(null);
+    }
+  }, []);
+
+  const setMatchAndShowModaleEditMatchScore = useCallback(
+    (matchToEditScore: MatchType) => {
+      setShowModaleEditMatchScore(true);
+      setMatchToEdit(matchToEditScore);
+    },
+    []
+  );
+
+  const handleCloseModaleEditMatchScore = useCallback((refresh = false) => {
+    setShowModaleEditMatchScore(false);
     setMatchToEdit(null);
     // setError({ show: false, Message: '' });
     if (refresh) {
@@ -170,7 +190,9 @@ const Home: React.FC = () => {
                         setMatchToEnd={setMatchToEnd}
                         setMatchToEdit={setMatchToEdit}
                         setMatchToDelete={setMatchToDelete}
-                        setShowModaleCreaEditMatch={setShowModaleCreaEditMatch}
+                        setMatchAndShowModaleEditMatchScore={
+                          setMatchAndShowModaleEditMatchScore
+                        }
                       />
                     )
                 )}
@@ -206,6 +228,13 @@ const Home: React.FC = () => {
         setMatches={setMatches}
         matchToEdit={matchToEdit}
       />
+      {matchToEdit !== null && (
+        <ModalEditMatchScore
+          show={showModaleEditMatchScore}
+          onClose={handleCloseModaleEditMatchScore}
+          match={matchToEdit}
+        />
+      )}
       {matchToEnd && (
         <Dialog
           open={!!matchToEnd._id}
