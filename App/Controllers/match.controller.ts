@@ -123,6 +123,14 @@ class MatchController {
       // Modifica il campo status del match a 'completed'
       matchDoc.match.status = 'completed';
 
+      // Metto il nome del team vincitore se è un pareggio metto vuoto
+      matchDoc.match.winner =
+        matchDoc.match.teamBlue.score > matchDoc.match.teamRed.score
+          ? matchDoc.match.teamBlue.name
+          : matchDoc.match.teamBlue.score < matchDoc.match.teamRed.score
+          ? matchDoc.match.teamRed.name
+          : '';
+
       // Aggiorna il documento nel database
       const response = await db.insert(matchDoc);
       res.json({ success: response.ok, _id: response.id });

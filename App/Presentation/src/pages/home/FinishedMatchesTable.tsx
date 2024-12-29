@@ -30,6 +30,7 @@ const FinishedMatchesTable: React.FC<FinishedMatchesTableProps> = ({
           <TableCell>Team Blue</TableCell>
           <TableCell>Score</TableCell>
           <TableCell>Date</TableCell>
+          {/* <TableCell>Winner</TableCell> */}
           <TableCell></TableCell>
         </TableRow>
       </TableHead>
@@ -54,6 +55,7 @@ const FinishedMatchesTable: React.FC<FinishedMatchesTableProps> = ({
                   <TableCell>
                     {new Date(match.date).toLocaleDateString('it-IT')}
                   </TableCell>
+                  {/* <TableCell>{match.winner}</TableCell> */}
                   <TableCell align='right'>
                     <IconButton onClick={() => setMatchToDelete(match)}>
                       <DeleteIcon />

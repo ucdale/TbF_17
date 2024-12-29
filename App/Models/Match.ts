@@ -67,6 +67,7 @@ export type MatchType = {
     teamRed: TeamInMatchType;
     teamBlue: TeamInMatchType;
     status: 'ongoing' | 'completed';
+    winner?: string;
     date: Date;
   };
 };
