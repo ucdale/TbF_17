@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Box, Grid2 as Grid, Typography } from '@mui/material';
 import { MatchType } from '../../../types/MatchType';
 import ItemBox from '../../../components/ItemBox';
