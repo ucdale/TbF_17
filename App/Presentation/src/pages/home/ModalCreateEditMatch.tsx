@@ -5,12 +5,15 @@ import {
   Box,
   Button,
   FormControl,
+  Link,
   TextField
 } from '@mui/material';
 import axios from 'axios';
 import { MatchType } from '../../types/MatchType';
 import ModalStyled from '../../components/ModalStyled';
 import { TeamType } from '../../types/TeamType';
+import { useNavigate } from 'react-router';
+import { ROUTES } from '../../models/routes';
 
 type ModalCreateEditMatchProps = {
   show: boolean;
@@ -25,6 +28,8 @@ const ModalCreateEditMatch: React.FC<ModalCreateEditMatchProps> = ({
   setMatches,
   matchToEdit = null
 }) => {
+  let navigate = useNavigate();
+
   const [name, setName] = useState<string | null>(null);
   const [error, setError] = useState({ show: false, Message: '' });
   const [teamOptions, setTeamOptions] = useState<TeamType[]>([]);
@@ -145,6 +150,21 @@ const ModalCreateEditMatch: React.FC<ModalCreateEditMatchProps> = ({
               {error.Message}
             </Alert>
           )}
+          {teamOptions?.length === 0 && !redTeam && !blueTeam && (
+            <Alert severity='warning' sx={{ mb: 3 }}>
+              There are no teams yet. Go{' '}
+              <Link
+                component='button'
+                variant='body2'
+                onClick={() => {
+                  navigate(ROUTES.MANAGE.path);
+                }}
+              >
+                here
+              </Link>{' '}
+              to add some, then start some matches!
+            </Alert>
+          )}
           <FormControl defaultValue='' required>
             <Autocomplete
               // disabled
@@ -177,6 +197,7 @@ const ModalCreateEditMatch: React.FC<ModalCreateEditMatchProps> = ({
               renderInput={(params) => (
                 <TextField
                   required
+                  autoFocus
                   error={
                     !redTeam || redTeam.name === '' || redTeam.name === null
                   }

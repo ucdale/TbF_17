@@ -1,20 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  Alert,
-  Box,
-  Button,
-  FormControl,
-  Paper,
-  TextField
-} from '@mui/material';
+import { Alert, Box, Button } from '@mui/material';
 import axios from 'axios';
 import { MatchType, PlayerInMatchType } from '../../../types/MatchType';
 import ModalStyled from '../../../components/ModalStyled';
-import { PlayerInTeamType, TeamType } from '../../../types/TeamType';
-import TeamMatchBox from '../../../components/Matches/TeamMatchBox';
-import ItemBox from '../../../components/ItemBox';
 import EditScoreTeamMatchBox from './EditScoreTeamMatchBox';
-import { PlayerType } from '../../../types/PlayerType';
 
 type ModalEditMatchScoreProps = {
   show: boolean;
@@ -239,7 +228,9 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
       match.teamBlue.score,
       match.teamRed.score,
       onClose,
+      originalDefenderInBlueTeam,
       originalDefenderInRedTeam,
+      originalStrikerInBlueTeam,
       originalStrikerInRedTeam,
       redTeamPlayerDefender,
       redTeamPlayerStriker,
@@ -273,22 +264,22 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
 
     if (
       blueTeamPlayerStriker &&
-      originalStrikerInRedTeam &&
-      blueTeamPlayerStriker.goals !== originalStrikerInRedTeam.goals
+      originalStrikerInBlueTeam &&
+      blueTeamPlayerStriker.goals !== originalStrikerInBlueTeam.goals
     ) {
       ids.push({
-        _id: originalStrikerInRedTeam._id,
+        _id: originalStrikerInBlueTeam._id,
         goals: blueTeamPlayerStriker.goals || 0
       });
     }
 
     if (
       blueTeamPlayerDefender &&
-      originalDefenderInRedTeam &&
-      blueTeamPlayerDefender.goals !== originalDefenderInRedTeam.goals
+      originalDefenderInBlueTeam &&
+      blueTeamPlayerDefender.goals !== originalDefenderInBlueTeam.goals
     ) {
       ids.push({
-        _id: originalDefenderInRedTeam._id,
+        _id: originalDefenderInBlueTeam._id,
         goals: blueTeamPlayerDefender.goals || 0
       });
     }
@@ -296,7 +287,9 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
   }, [
     blueTeamPlayerDefender,
     blueTeamPlayerStriker,
+    originalDefenderInBlueTeam,
     originalDefenderInRedTeam,
+    originalStrikerInBlueTeam,
     originalStrikerInRedTeam,
     redTeamPlayerDefender,
     redTeamPlayerStriker
@@ -306,6 +299,8 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
     async (matchId: string) => {
       const playerIdsToModifyGoals: { _id: string; goals: number }[] =
         idsOfPlayersWithChangedGoals();
+
+      debugger;
 
       const updatePromises = playerIdsToModifyGoals.map((p) => {
         if (p) {
@@ -341,6 +336,11 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
     >
       <div>
         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          {error.show && (
+            <Alert sx={{ mb: 3 }} severity='error'>
+              {error.Message}
+            </Alert>
+          )}
           <EditScoreTeamMatchBox
             match={match}
             teamRed

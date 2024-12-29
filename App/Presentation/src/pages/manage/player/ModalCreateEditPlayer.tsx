@@ -104,6 +104,7 @@ const ModalCreateEditPlayer: React.FC<ModalCreateEditPlayerProps> = ({
               id='name'
               label='Name'
               required
+              autoFocus
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setName(event.target.value);
               }}

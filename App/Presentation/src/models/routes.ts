@@ -32,7 +32,7 @@ const ROUTES: { [key in keyof typeof RouteKeys]: RouteType } = {
   },
   MANAGE: {
     id: 'manage',
-    title: 'Manage teams',
+    title: 'Manage',
     path: 'manage/',
     home: true,
     permalink: ''

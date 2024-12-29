@@ -177,6 +177,7 @@ const ModalCreateEditTeam: React.FC<ModalCreateEditTeamProps> = ({
               id='name'
               label='Name'
               required
+              autoFocus
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setName(event.target.value);
               }}

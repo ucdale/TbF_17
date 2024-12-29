@@ -58,6 +58,12 @@ const BestTeams: React.FC = () => {
       disablePadding: false,
       label: 'Wins'
     }
+    // {
+    //   id: 'blocks',
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: 'Blocks'
+    // }
   ];
 
   return (
@@ -66,7 +72,7 @@ const BestTeams: React.FC = () => {
         <Grid size={12}>
           <div className='header-container'>
             <h1 className='header-title' style={{ marginBottom: '40px' }}>
-              Manage Teams
+              Best Teams
             </h1>
           </div>
         </Grid>

@@ -59,7 +59,7 @@ const SortableTable: React.FC<SortableTableProps> = ({ headCells, rows }) => {
   const [orderBy, setOrderBy] =
     React.useState<keyof { name: string; wins: number }>('wins');
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -100,12 +100,17 @@ const SortableTable: React.FC<SortableTableProps> = ({ headCells, rows }) => {
     };
 
   return (
-    <TableContainer component={Paper}>
-      <Table
-        sx={{ minWidth: 750 }}
-        aria-labelledby='tableTitle'
-        size={'medium'}
-      >
+    <TableContainer component={Paper} style={{ height: '100%' }}>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component='div'
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      <Table aria-labelledby='tableTitle' size={'medium'}>
         <TableHead>
           <TableRow>
             {headCells.map((headCell) => (
@@ -147,15 +152,7 @@ const SortableTable: React.FC<SortableTableProps> = ({ headCells, rows }) => {
           )}
         </TableBody>
       </Table>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component='div'
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {(!rows || rows.length === 0) && <h3>There are no teams yet ...</h3>}
     </TableContainer>
   );
 };

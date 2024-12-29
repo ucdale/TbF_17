@@ -118,7 +118,8 @@ const ManagePlayers: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {players && players.length > 0 ? (
+                {players &&
+                  players.length > 0 &&
                   players.map((player) => (
                     <PlayerTableRow
                       key={player._id}
@@ -127,12 +128,12 @@ const ManagePlayers: React.FC = () => {
                       setPlayerToEdit={setPlayerToEdit}
                       deletePlayer={deletePlayer}
                     />
-                  ))
-                ) : (
-                  <h3>There are no players yet ...</h3>
-                )}
+                  ))}
               </TableBody>
             </Table>
+            {(!players || players.length === 0) && (
+              <h3>There are no players yet ...</h3>
+            )}
           </TableContainer>
         ) : (
           <CircularProgress sx={{ marginTop: '40' }} size={40} />

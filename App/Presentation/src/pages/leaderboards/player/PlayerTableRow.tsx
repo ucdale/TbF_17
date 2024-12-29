@@ -8,18 +8,12 @@ type PlayerTableRowProps = {
 
 const PlayerTableRow: React.FC<PlayerTableRowProps> = ({ player }) => {
   return (
-    <>
-      <TableRow
-        key={player._id}
-        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-      >
-        <TableCell component='th' scope='row'>
-          {player.name}
-        </TableCell>
-        <TableCell align='right'>{player.goals}</TableCell>
-        <TableCell align='right'>{player.blocks}</TableCell>
-      </TableRow>
-    </>
+    <TableRow hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+      <TableCell component='th' scope='row'>
+        {player.name}
+      </TableCell>
+      <TableCell align='right'>{player.goals}</TableCell>
+    </TableRow>
   );
 };
 

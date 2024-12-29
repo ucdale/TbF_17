@@ -1,9 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import {
   Box,
-  Button,
-  CircularProgress,
-  Grid2 as Grid,
   Paper,
   Table,
   TableBody,
@@ -14,9 +11,8 @@ import {
   TableRow,
   TableSortLabel
 } from '@mui/material';
-
 import { visuallyHidden } from '@mui/utils';
-import { PlayerType } from '../types/PlayerType';
+import { PlayerType } from '../../../types/PlayerType';
 import PlayerTableRow from './PlayerTableRow';
 
 interface HeadCell {
@@ -62,7 +58,7 @@ const SortableTable: React.FC<SortableTableProps> = ({ headCells, rows }) => {
   const [order, setOrder] = React.useState<Order>('desc');
   const [orderBy, setOrderBy] = React.useState<keyof PlayerType>('goals');
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -103,11 +99,16 @@ const SortableTable: React.FC<SortableTableProps> = ({ headCells, rows }) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table
-        sx={{ minWidth: 750 }}
-        aria-labelledby='tableTitle'
-        size={'medium'}
-      >
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component='div'
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      <Table aria-labelledby='tableTitle' size={'medium'}>
         <TableHead>
           <TableRow>
             {headCells.map((headCell) => (
@@ -149,15 +150,7 @@ const SortableTable: React.FC<SortableTableProps> = ({ headCells, rows }) => {
           )}
         </TableBody>
       </Table>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component='div'
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {(!rows || rows.length === 0) && <h3>There are no players yet ...</h3>}
     </TableContainer>
   );
 };

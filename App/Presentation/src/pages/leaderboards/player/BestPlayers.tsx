@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { CircularProgress, Grid2 as Grid } from '@mui/material';
 import { PlayerType } from '../../../types/PlayerType';
 import axios from 'axios';
-import SortableTable from '../../../components/SortableTable';
+import SortableTable from './SortableTable';
 
 const BestPlayers: React.FC = () => {
   const [players, setPlayers] = useState<PlayerType[] | null>(null);
@@ -56,13 +56,13 @@ const BestPlayers: React.FC = () => {
       numeric: true,
       disablePadding: false,
       label: 'Goals'
-    },
-    {
-      id: 'blocks',
-      numeric: true,
-      disablePadding: false,
-      label: 'Blocks'
     }
+    // {
+    //   id: 'blocks',
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: 'Blocks'
+    // }
   ];
 
   return (
