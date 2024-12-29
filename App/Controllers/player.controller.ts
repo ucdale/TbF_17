@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import nano from 'nano';
 import { v4 as uuidv4 } from 'uuid';
-import { isPlayerType } from '../Models/Player';
+import {
+  allPlayers,
+  playerById,
+  searchPlayersByName
+} from '../DataSources/player.dataSource';
 
 const couch = nano('http://admin:admin@127.0.0.1:5984');
 const db = couch.db.use('tbf17');
@@ -9,14 +13,13 @@ const db = couch.db.use('tbf17');
 class PlayerController {
   static async getAllPlayers(req: Request, res: Response): Promise<void> {
     try {
-      const response = await db.find({ selector: { type: 'player' } });
-      const players = response.docs.map((doc: any) => ({
-        _id: doc._id,
-        ...doc.player
-      }));
+      const players = await allPlayers();
+
       res.json(players);
     } catch (error) {
-      res.status(500).json({ error: 'Error fetching players' });
+      res
+        .status(500)
+        .json({ error: error.message || 'Error fetching players' });
     }
   }
 
@@ -27,24 +30,16 @@ class PlayerController {
     try {
       const { term, excludeName } = req.query;
 
-      // Costruisci il selettore per filtrare i giocatori in base al termine di ricerca e al nome da escludere
-      const selector: any = {
-        type: 'player',
-        'player.name': { $regex: term ? `(?i)${term}` : '' }
-      };
+      const players = await searchPlayersByName(
+        term as string,
+        excludeName as string
+      );
 
-      if (excludeName) {
-        selector['player.name'].$ne = excludeName;
-      }
-
-      const response = await db.find({ selector });
-      const players = response.docs.map((doc: any) => ({
-        _id: doc._id,
-        ...doc.player
-      }));
       res.json(players);
     } catch (error) {
-      res.status(500).json({ error: 'Error fetching players' });
+      res
+        .status(500)
+        .json({ error: error.message || 'Error fetching players' });
     }
   }
 
@@ -65,7 +60,7 @@ class PlayerController {
       const response = await db.insert(playerDoc);
       res.json({ success: response.ok, _id: response.id, ...playerDoc.player });
     } catch (error) {
-      res.status(500).json({ error: 'Error creating player' });
+      res.status(500).json({ error: error.message || 'Error creating player' });
     }
   }
 
@@ -74,7 +69,7 @@ class PlayerController {
       const { id, name } = req.body;
 
       // sotto si può usare db.head per avere solo l'header del documento (con il rev)
-      const playerDoc = (await db.get(id)) as any; // TODO da mettere il type corretto per player
+      const playerDoc = await playerById(id);
 
       playerDoc.player.name = name;
 
@@ -84,7 +79,9 @@ class PlayerController {
       });
       res.json({ success: response.ok, _id: response.id, ...playerDoc.player });
     } catch (error) {
-      res.status(500).json({ error: 'Error updating player name' });
+      res
+        .status(500)
+        .json({ error: error.message || 'Error updating player name' });
     }
   }
 
@@ -93,12 +90,7 @@ class PlayerController {
       const { id, goals } = req.body;
 
       // sotto si può usare db.head per avere solo l'header del documento (con il rev)
-      const playerDoc = await db.get(id);
-
-      if (!isPlayerType(playerDoc)) {
-        res.status(400).json({ error: 'Invalid match document' });
-        return;
-      }
+      const playerDoc = await playerById(id);
 
       playerDoc.player.goals = playerDoc.player.goals + goals;
 
@@ -108,7 +100,9 @@ class PlayerController {
       });
       res.json({ success: response.ok, _id: response.id, ...playerDoc.player });
     } catch (error) {
-      res.status(500).json({ error: 'Error updating player goals' });
+      res
+        .status(500)
+        .json({ error: error.message || 'Error updating player goals' });
     }
   }
 
@@ -117,13 +111,13 @@ class PlayerController {
       const { id } = req.body;
 
       // Fetch the existing player document to get the _rev
-      const playerDoc = await db.get(id);
+      const playerDoc = await playerById(id);
 
       // Delete the document using the id and _rev
       const response = await db.destroy(id, playerDoc._rev);
       res.json({ success: response.ok, _id: response.id });
     } catch (error) {
-      res.status(500).json({ error: 'Error deleting player' });
+      res.status(500).json({ error: error.message || 'Error deleting player' });
     }
   }
 }

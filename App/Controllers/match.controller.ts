@@ -55,8 +55,9 @@
 
 import { Request, Response } from 'express';
 import nano from 'nano';
-import { v4 as uuidv4 } from 'uuid';
-import { isMatchType, MatchType } from '../Models/Match';
+import { allMatches, matchById } from '../DataSources/match.dataSource';
+import { allTeams } from '../DataSources/team.dataSource';
+import { MatchType } from '../Models/Match';
 
 const couch = nano('http://admin:admin@127.0.0.1:5984');
 const db = couch.db.use('tbf17');
@@ -64,14 +65,47 @@ const db = couch.db.use('tbf17');
 class MatchController {
   static async getAllMatches(req: Request, res: Response): Promise<void> {
     try {
-      const response = await db.find({ selector: { type: 'match' } });
-      const matches = response.docs.map((doc: any) => ({
-        _id: doc._id,
-        ...doc.match
-      }));
+      const matches = await allMatches();
       res.json(matches);
     } catch (error) {
-      res.status(500).json({ error: 'Error fetching matches' });
+      res
+        .status(500)
+        .json({ error: error.message || 'Error fetching matches' });
+    }
+  }
+
+  static async getWinnersOfMatches(req: Request, res: Response): Promise<void> {
+    try {
+      const matchDocs = await allMatches();
+      const teamDocs = await allTeams();
+
+      const winnersCount: { name: string; wins: number }[] = teamDocs.map(
+        (doc: any) => {
+          return {
+            name: doc.name,
+            wins: 0
+          };
+        }
+      );
+
+      // Conta le occorrenze di ogni vincitore
+      matchDocs.forEach((doc: any) => {
+        const winner = doc.winner;
+        if (winner) {
+          const elementoTrovato = winnersCount.find((x) => x.name === winner);
+          if (!elementoTrovato) {
+            winnersCount.push({ name: winner, wins: 1 });
+          } else {
+            elementoTrovato.wins++;
+          }
+        }
+      });
+
+      res.json(winnersCount);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: error.message || 'Error fetching matches' });
     }
   }
 
@@ -105,7 +139,7 @@ class MatchController {
       const response = await db.insert(matchDoc);
       res.json({ success: response.ok, _id: response.id, ...matchDoc });
     } catch (error) {
-      res.status(500).json({ error: 'Error creating match' });
+      res.status(500).json({ error: error.message || 'Error creating match' });
     }
   }
 
@@ -113,12 +147,7 @@ class MatchController {
     try {
       const { id } = req.body;
 
-      const matchDoc = await db.get(id);
-
-      if (!isMatchType(matchDoc)) {
-        res.status(400).json({ error: 'Invalid match document' });
-        return;
-      }
+      const matchDoc = await matchById(id);
 
       // Modifica il campo status del match a 'completed'
       matchDoc.match.status = 'completed';
@@ -135,7 +164,7 @@ class MatchController {
       const response = await db.insert(matchDoc);
       res.json({ success: response.ok, _id: response.id });
     } catch (error) {
-      res.status(500).json({ error: 'Error ending match' });
+      res.status(500).json({ error: error.message || 'Error ending match' });
     }
   }
 
@@ -151,12 +180,7 @@ class MatchController {
         blueDefenderGoals
       } = req.body;
 
-      const matchDoc = await db.get(id);
-
-      if (!isMatchType(matchDoc)) {
-        res.status(400).json({ error: 'Invalid match document' });
-        return;
-      }
+      const matchDoc = await matchById(id);
 
       if (redTeamScore) {
         matchDoc.match.teamRed.score = redTeamScore;
@@ -193,7 +217,7 @@ class MatchController {
       const response = await db.insert(matchDoc);
       res.json({ success: response.ok, _id: response.id });
     } catch (error) {
-      res.status(500).json({ error: 'Error ending match' });
+      res.status(500).json({ error: error.message || 'Error ending match' });
     }
   }
 
@@ -202,14 +226,14 @@ class MatchController {
       const { id } = req.body;
       console.log('>>>>>>>>>>>>>>>>>>>', id);
 
-      const matchDoc = await db.get(id);
+      const matchDoc = await matchById(id);
 
       console.log('>>>>>>>>>>>>>>>>>>>', matchDoc._rev);
 
       const response = await db.destroy(id, matchDoc._rev);
       res.json({ success: response.ok, _id: response.id });
     } catch (error) {
-      res.status(500).json({ error: 'Error deleting match' });
+      res.status(500).json({ error: error.message || 'Error deleting match' });
     }
   }
 }

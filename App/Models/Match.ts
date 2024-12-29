@@ -62,6 +62,7 @@ export type TeamInMatchType = {
 
 export type MatchType = {
   _id: string;
+  _rev: string;
   type: 'match';
   match: {
     teamRed: TeamInMatchType;

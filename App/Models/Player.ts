@@ -1,5 +1,6 @@
 export type PlayerType = {
   _id: string;
+  _rev: string;
   type: 'player';
   player: {
     name: string;

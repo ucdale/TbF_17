@@ -5,6 +5,11 @@ import { authenticate } from '../Middlewares/auth.middleware';
 const router = express.Router();
 
 router.get('/getAllMatches', authenticate, MatchController.getAllMatches);
+router.get(
+  '/getWinnersOfMatches',
+  authenticate,
+  MatchController.getWinnersOfMatches
+);
 router.post('/createMatch', authenticate, MatchController.createMatch);
 router.post('/endMatch', authenticate, MatchController.endMatch);
 router.post(

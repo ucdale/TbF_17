@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import nano from 'nano';
-
+import {
+  allTeams,
+  searchTeamsByName,
+  teamById
+} from '../DataSources/team.dataSource';
 import { v4 as uuidv4 } from 'uuid';
+import { PlayerInTeamType } from '../Models/Team';
 
 const couch = nano('http://admin:admin@127.0.0.1:5984');
 const db = couch.db.use('tbf17');
@@ -9,14 +14,10 @@ const db = couch.db.use('tbf17');
 class TeamController {
   static async getAllTeams(req: Request, res: Response): Promise<void> {
     try {
-      const response = await db.find({ selector: { type: 'team' } });
-      const teams = response.docs.map((doc: any) => ({
-        _id: doc._id,
-        ...doc.team
-      }));
+      const teams = await allTeams();
       res.json(teams);
     } catch (error) {
-      res.status(500).json({ error: 'Error fetching teams' });
+      res.status(500).json({ error: error.message || 'Error fetching teams' });
     }
   }
 
@@ -44,14 +45,14 @@ class TeamController {
         selector['team.name'].$ne = excludeName;
       }
 
-      const response = await db.find({ selector });
-      const teams = response.docs.map((doc: any) => ({
-        _id: doc._id,
-        ...doc.team
-      }));
+      const teams = await searchTeamsByName(
+        term as string,
+        excludeName as string
+      );
+
       res.json(teams);
     } catch (error) {
-      res.status(500).json({ error: 'Error fetching teams' });
+      res.status(500).json({ error: error.message || 'Error fetching teams' });
     }
   }
 
@@ -82,7 +83,7 @@ class TeamController {
       const response = await db.insert(teamDoc);
       res.json({ success: response.ok, _id: response.id, ...teamDoc.team });
     } catch (error) {
-      res.status(500).json({ error: 'Error creating team' });
+      res.status(500).json({ error: error.message || 'Error creating team' });
     }
   }
 
@@ -91,20 +92,24 @@ class TeamController {
       const { id, name, strikerPlayer, defenderPlayer } = req.body;
 
       // sotto si può usare db.head per avere solo l'header del documento (con il rev)
-      const teamDoc = (await db.get(id)) as any; // TODO da mettere il type corretto per team
+      const teamDoc = await teamById(id);
 
       teamDoc.team.name = name;
 
-      let newStriker = {
+      let newStriker: PlayerInTeamType = {
         position: 'striker',
         _id: strikerPlayer._id,
-        name: strikerPlayer.name
+        name: strikerPlayer.name,
+        goals: 0,
+        blocks: 0
       };
 
-      let newDefender = {
+      let newDefender: PlayerInTeamType = {
         position: 'defender',
         _id: defenderPlayer._id,
-        name: defenderPlayer.name
+        name: defenderPlayer.name,
+        goals: 0,
+        blocks: 0
       };
 
       teamDoc.team.players = [newStriker, newDefender];
@@ -115,7 +120,9 @@ class TeamController {
       });
       res.json({ success: response.ok, _id: response.id, ...teamDoc.team });
     } catch (error) {
-      res.status(500).json({ error: 'Error updating team name' });
+      res
+        .status(500)
+        .json({ error: error.message || 'Error updating team name' });
     }
   }
 
@@ -123,14 +130,13 @@ class TeamController {
     try {
       const { id } = req.body;
 
-      // Fetch the existing team document to get the _rev
-      const teamDoc = await db.get(id);
+      const teamDoc = await teamById(id);
 
       // Delete the document using the id and _rev
       const response = await db.destroy(id, teamDoc._rev);
       res.json({ success: response.ok, _id: response.id });
     } catch (error) {
-      res.status(500).json({ error: 'Error deleting team' });
+      res.status(500).json({ error: error.message || 'Error deleting team' });
     }
   }
 }

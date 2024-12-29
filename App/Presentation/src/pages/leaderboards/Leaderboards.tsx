@@ -1,7 +1,15 @@
 import React from 'react';
 
+import BestTeams from './team/BestTeams';
+import BestPlayers from './player/BestPlayers';
+
 const Leaderboards: React.FC = () => {
-  return <div>{/* Add your content here */}</div>;
+  return (
+    <div>
+      <BestTeams />
+      <BestPlayers />
+    </div>
+  );
 };
 
 export default Leaderboards;

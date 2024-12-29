@@ -144,7 +144,6 @@ const ModalEditMatchScore: React.FC<ModalEditMatchScoreProps> = ({
 
   const modificaGoalPlayer = useCallback(async (id: string, goals: number) => {
     try {
-      debugger;
       const response = await axios.post(
         'http://localhost:3001/player/updatePlayerGoals',
         {
