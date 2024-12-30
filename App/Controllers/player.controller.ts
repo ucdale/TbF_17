@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
-import nano from 'nano';
 import { v4 as uuidv4 } from 'uuid';
 import {
   allPlayers,
   playerById,
   searchPlayersByName
 } from '../DataSources/player.dataSource';
+import couchDbConnection from '../couchDbConnection';
 
-const couch = nano('http://admin:admin@127.0.0.1:5984');
+const couch = couchDbConnection;
 const db = couch.db.use('tbf17');
 
 class PlayerController {

@@ -1,9 +1,9 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import nano from 'nano';
 import matchRouter from './Routes/match.router';
 import teamRouter from './Routes/team.router';
 import playerRouter from './Routes/player.router';
+import couchDbConnection from './couchDbConnection';
 
 const app: Express = express();
 const PORT = 3001;
@@ -14,9 +14,36 @@ app.use(cors());
 // questo è built-in middleware in Express that is used for parsing incoming requests with JSON payloads
 app.use(express.json());
 
-// Configura CouchDB
-const couch = nano('http://admin:admin@127.0.0.1:5984');
-const db = couch.db.use('tbf17');
+const couch = couchDbConnection;
+const DBNAME = 'tbf17';
+
+console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', process.env.COUCHDB_URL);
+console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', process.env.COUCHDB_URL);
+console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', process.env.COUCHDB_URL);
+console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', process.env.COUCHDB_URL);
+
+// Verifica se il database esiste, altrimenti crealo
+couch.db
+  .get(DBNAME)
+  .then((body) => {
+    console.log(`Database ${DBNAME} already exists.`);
+  })
+  .catch((err) => {
+    if (err.statusCode === 404) {
+      couch.db
+        .create(DBNAME)
+        .then(() => {
+          console.log(`Database ${DBNAME} created.`);
+        })
+        .catch((createErr) => {
+          console.error(`Error creating database ${DBNAME}:`, createErr);
+        });
+    } else {
+      console.error(`Error checking database ${DBNAME}:`, err);
+    }
+  });
+
+const db = couch.db.use(DBNAME);
 
 // Rotta fittizia per il test che genera un errore
 app.get('/error', (req, res, next) => {

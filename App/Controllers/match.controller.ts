@@ -57,9 +57,9 @@ import { Request, Response } from 'express';
 import nano from 'nano';
 import { allMatches, matchById } from '../DataSources/match.dataSource';
 import { allTeams } from '../DataSources/team.dataSource';
-import { MatchType } from '../Models/Match';
+import couchDbConnection from '../couchDbConnection';
 
-const couch = nano('http://admin:admin@127.0.0.1:5984');
+const couch = couchDbConnection;
 const db = couch.db.use('tbf17');
 
 class MatchController {

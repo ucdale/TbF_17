@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import nano from 'nano';
 import {
   allTeams,
   searchTeamsByName,
@@ -7,8 +6,9 @@ import {
 } from '../DataSources/team.dataSource';
 import { v4 as uuidv4 } from 'uuid';
 import { PlayerInTeamType } from '../Models/Team';
+import couchDbConnection from '../couchDbConnection';
 
-const couch = nano('http://admin:admin@127.0.0.1:5984');
+const couch = couchDbConnection;
 const db = couch.db.use('tbf17');
 
 class TeamController {

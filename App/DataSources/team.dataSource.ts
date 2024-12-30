@@ -1,7 +1,7 @@
-import nano from 'nano';
+import couchDbConnection from '../couchDbConnection';
 import { isTeamType, TeamType } from '../Models/Team';
 
-const couch = nano('http://admin:admin@127.0.0.1:5984');
+const couch = couchDbConnection;
 const db = couch.db.use('tbf17');
 
 export const allTeams = async (): Promise<TeamType[]> => {

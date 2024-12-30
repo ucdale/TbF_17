@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  nodejs-server:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "3001:3001"
+    networks:
+      - tbf17-app
+    depends_on:
+      - TbF17-database
+    environment:
+      - COUCHDB_URL=http://admin:admin@TbF17-database:5984
+
+  react-app:
+    build:
+      context: ./App/Presentation
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - tbf17-app
+    depends_on:
+      - nodejs-server
+
+  TbF17-database:
+    image: couchdb
+    restart: always
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+    networks:
+      - tbf17-app
+    volumes:
+      - dbdata:/opt/couchdb/data
+
+networks:
+  tbf17-app:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
