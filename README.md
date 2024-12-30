@@ -11,6 +11,12 @@ index.ts: Punto di ingresso del backend Express.
 Prerequisiti
 Assicurati di avere installato Node.js e npm sul tuo sistema.
 
+# CouchDB
+L'applicazione richieste CouchDB installato, puoi andare sul sito ufficiale (http://couchdb.apache.org/) per scaricarlo e installarlo.
+<br/>
+**CouchDB deve avere come account name admin e password admin**
+
+
 # Installazione delle Dipendenze
 Per installare tutte le dipendenze necessarie per il progetto, esegui il seguente comando nella radice del progetto:
 >npm install
