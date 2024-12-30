@@ -1,5 +1,4 @@
-/* eslint-env node */
-
+// eslint-disable-next-line
 module.exports = {
   setupFilesAfterEnv: ['./src/setupTests.js'],
   testEnvironment: 'jsdom',

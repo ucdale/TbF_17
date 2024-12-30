@@ -7,9 +7,10 @@
     "test": "jest --detectOpenHandles",
     "build": "npx tsc",
     "lint": "eslint ./App",
-    "start:frontend": "cd ./App/Presentation && npm run start",
-    "start:backend": "cd ./App && nodemon index.ts",
     "install:frontend": "cd ./App/Presentation && npm i",
+    "start:frontend": "cd ./App/Presentation && npm run start",
+    "test:frontend": "cd ./App/Presentation && npm run test",
+    "start:backend": "cd ./App && nodemon index.ts",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
   },
   "proxy": "http://localhost:3001",
