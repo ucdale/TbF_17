@@ -1,7 +1,7 @@
-import nano from 'nano';
 import { isPlayerType, PlayerType } from '../Models/Player';
+import couchDbConnection from '../couchDbConnection';
 
-const couch = nano('http://admin:admin@127.0.0.1:5984');
+const couch = couchDbConnection;
 const db = couch.db.use('tbf17');
 
 export const allPlayers = async (): Promise<PlayerType[]> => {
