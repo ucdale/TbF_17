@@ -1,4 +1,5 @@
-import * as React from "react"
+import * as React from "react";
+
 const LogoMolo17 = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} {...props}>
     <path
@@ -11,5 +12,6 @@ const LogoMolo17 = (props) => (
       }}
     />
   </svg>
-)
-export default LogoMolo17
+);
+
+export default LogoMolo17;

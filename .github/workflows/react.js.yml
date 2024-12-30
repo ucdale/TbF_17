@@ -26,9 +26,9 @@ jobs:
     - run: cd App/Presentation
     - run: npm ci
       working-directory: ./App/Presentation
-    - run: npm run build --if-present
-      working-directory: ./App/Presentation
     - name: Run tests
       run: node --trace-deprecation ./node_modules/.bin/jest
       working-directory: ./App/Presentation
-      timeout-minutes: 2  # Aumenta il timeout se necessario
+      timeout-minutes: 2
+    - run: npm run build --if-present
+      working-directory: ./App/Presentation
