@@ -2,13 +2,28 @@ Questa applicazione è un gestore di match di calcio balilla per Molo17. Il prog
 Una Board di miro per l'analisi e i wireframe è presente qui <a name="miro">https://miro.com/app/board/uXjVL0996mI=/</a>
 
 # Struttura del Progetto
-App: Contiene il codice del backend e del frontend.
-Presentation/: Contiene il codice del frontend React.
-Routes/: Contiene i router per le diverse entità (match, team, player).
-Controllers/: Contiene i controller per gestire la logica delle rotte.
-DataSources/: Contiene le funzioni per interagire con CouchDB.
-index.ts: Punto di ingresso del backend Express.
-Prerequisiti
+* App: Contiene il codice del backend e del frontend.
+* Presentation/: Contiene il codice del frontend React.
+* Routes/: Contiene i router per le diverse entità (match, team, player).
+* Controllers/: Contiene i controller per gestire la logica delle rotte.
+* DataSources/: Contiene le funzioni per interagire con CouchDB.
+* index.ts: Punto di ingresso del backend Express.
+
+# Utilizzando i container Docker.
+## Per avviare l'intera applicazione con Docker Compose, segui questi passaggi:
+
+1.Assicurati di avere Docker e Docker Compose installati sul tuo sistema.
+
+2.Costruisci le immagini e i container Docker:
+>docker-compose build
+
+3.Lancia i container Docker:
+>docker-compose up
+
+4.Fermare i servizi Docker:
+>docker-compose down
+
+# Senza utilizzare i container Docker.
 Assicurati di avere installato Node.js e npm sul tuo sistema.
 
 # CouchDB
