@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 module.exports = {
   setupFilesAfterEnv: ['./src/setupTests.js'],
   testEnvironment: 'jsdom',
