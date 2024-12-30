@@ -1,12 +1,13 @@
 // eslint-disable-next-line
 module.exports = {
-  setupFilesAfterEnv: ['./src/setupTests.js'],
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
-  },
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest'
   },
-  transformIgnorePatterns: ['/node_modules/(?!axios).+\\.js$']
+  moduleNameMapper: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
+  },
+  transformIgnorePatterns: ['/node_modules/(?!axios).+\\.js$'],
+  setupFilesAfterEnv: ['./src/setupTests.js']
 };
